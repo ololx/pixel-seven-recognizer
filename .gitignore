@@ -50,9 +50,7 @@ nbproject/*
 !nbproject/project.xml
 
 # project specific
-*.html
-*.xls
-*.owl
+input/*
 
 # general exclude
 !.gitignore

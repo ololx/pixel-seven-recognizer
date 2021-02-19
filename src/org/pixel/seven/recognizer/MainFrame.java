@@ -39,7 +39,7 @@ public class MainFrame extends JFrame {
 
         setVisible(true);
 
-        DrawingFrame drawing = new DrawingFrame(this, 28, 28);
+        DrawingFrame drawing = new DrawingFrame(28, 28);
         JPanel mainPanel = new JPanel(new GridLayout(4, 1, 0, 0));
         drawing.init();
 
@@ -65,7 +65,5 @@ public class MainFrame extends JFrame {
         mainPanel.add(buttonPanel);
 
         add(mainPanel);
-
-
     }
 }

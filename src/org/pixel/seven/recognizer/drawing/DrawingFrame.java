@@ -1,11 +1,14 @@
 package org.pixel.seven.recognizer.drawing;
 
+import org.pixel.seven.recognizer.recognition.SbPerceptron;
+
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 /**
  * @project pixel-seven-recognizer
@@ -17,8 +20,11 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
 
     private BufferedImage image;
 
-    public DrawingFrame(JFrame main, int width, int height) {
+    private SbPerceptron neuro;
+
+    public DrawingFrame(SbPerceptron neuro, int width, int height) {
         this(width, height);
+        this.neuro = neuro;
     }
     public DrawingFrame(int width, int height) {
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -42,7 +48,7 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        this.paint(e.getX(), e.getY());
+        if (e.isControlDown()) this.image = new BufferedImage(28, 28, BufferedImage.TYPE_INT_RGB);
     }
 
     /**
@@ -62,6 +68,25 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
      */
     @Override
     public void mouseReleased(MouseEvent e) {
+        int[] pixels = new int[28 * 28];
+        image.getRGB(0, 0, 28, 28, pixels, 0, 28);
+        for (int j = 0; j < pixels.length; j++) {
+            pixels[j] = pixels[j] == Color.WHITE.getRGB() ? 1 : 0;
+        }
+
+        neuro.start(pixels);
+
+
+        for (int x = 0; x < 28; x++) {
+            for (int y = 0; y < 28; y++) {
+                System.err.print(pixels[x + y * 28] + " ");
+            }
+
+            System.err.println();
+        }
+
+
+        System.err.println(neuro.getReaction() == 1);
     }
 
     /**
@@ -71,6 +96,7 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
      */
     @Override
     public void mouseEntered(MouseEvent e) {
+        this.draw(image, this.getWidth(), this.getHeight());
     }
 
     /**
@@ -80,26 +106,40 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
      */
     @Override
     public void mouseExited(MouseEvent e) {
+        this.draw(image, this.getWidth(), this.getHeight());
     }
 
     public void init() {
         addMouseMotionListener(this);
+        addMouseListener(this);
         setSize(500, 500);
         setVisible(true);
         this.paint();
     }
 
     private void paint() {
-        int height = this.getSize().height;
-        int width = this.getSize().width;
+        int height = this.getHeight();
+        int width = this.getWidth();
         this.draw(image, width, height);
     }
 
-    private void paint(int x, int y) {
+    private void paint(int xx, int yy) {
         int height = this.getSize().height;
         int width = this.getSize().width;
+        int x = (int) (xx * (1d * image.getWidth() / width));
+        int y = (int) (yy * (1d * image.getHeight() / height));
+        int lx = x == 0 ? 0 : x - 1;
+        int rx = x == 27 ? 27 : x + 1;
+        int ly = x == 0 ? 0 : y - 1;
+        int ry = x == 27 ? 27 : y + 1;
 
-        image.setRGB((int) (x * (1d * image.getWidth() / width)), (int) (y * (1d * image.getHeight() / height)), Color.WHITE.getRGB());
+        for (int px = lx; px <= rx; px++) {
+            for (int py = ly; py <= ry; py++) {
+                image.setRGB(px, py, Color.WHITE.getRGB());
+            }
+        }
+
+
         this.draw(image, width, height);
     }
 
