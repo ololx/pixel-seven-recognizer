@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.Arrays;
 
 /**
  * @project pixel-seven-recognizer
@@ -48,7 +49,6 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.isControlDown()) this.image = new BufferedImage(28, 28, BufferedImage.TYPE_INT_RGB);
     }
 
     /**
@@ -58,7 +58,10 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        this.paint(e.getX(), e.getY());
+        if (e.getButton() == 3 ) {
+            this.image = new BufferedImage(28, 28, BufferedImage.TYPE_INT_RGB);
+            this.paint();
+        } else this.paint(e.getX(), e.getY());
     }
 
     /**
@@ -75,17 +78,6 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
         }
 
         neuro.start(pixels);
-
-
-        for (int x = 0; x < 28; x++) {
-            for (int y = 0; y < 28; y++) {
-                System.err.print(pixels[x + y * 28] + " ");
-            }
-
-            System.err.println();
-        }
-
-
         System.err.println(neuro.getReaction() == 1);
     }
 
@@ -112,9 +104,30 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
     public void init() {
         addMouseMotionListener(this);
         addMouseListener(this);
-        setSize(500, 500);
+        setSize(1024, 1024);
         setVisible(true);
         this.paint();
+
+        double[] weights = neuro.getWeights();
+        int color = Color.BLACK.getRGB();
+
+        double minW = weights[0], maxW = weights[0];
+        for (int i = 0; i < weights.length; i++) {
+            if (weights[i] < minW) minW = weights[i];
+            if (weights[i] > maxW) maxW = weights[i];
+        }
+
+        for (int x = 0; x < 28; x++) {
+            for (int y = 0; y < 28; y++) {
+                if (weights[y + x * 28] == 0) color = Color.BLACK.getRGB();
+                else if (weights[y + x * 28] < 0) color = new Color((int) ((255 / minW) * (int) (weights[y + x * 28])), 0, 0).getRGB();
+                else if (weights[y + x * 28] > 0) color = new Color(0, (int) ((255 / maxW) * (int) (weights[y + x * 28])), 0).getRGB();
+
+                image.setRGB(y, x, color);
+            }
+        }
+
+        this.draw(image, this.getWidth(), this.getHeight());
     }
 
     private void paint() {
@@ -138,7 +151,6 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
                 image.setRGB(px, py, Color.WHITE.getRGB());
             }
         }
-
 
         this.draw(image, width, height);
     }

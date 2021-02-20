@@ -16,7 +16,7 @@ public class SbPerceptron implements Neuron {
     /**
      * The one A-Elements (associative)
      */
-    private int association;
+    private double association;
 
     /**
      * The one R-Element (reactive)
@@ -27,16 +27,16 @@ public class SbPerceptron implements Neuron {
      * The weights of sensors
      * (links between s-elements and a-element)
      */
-    private int[] weights;
+    private double[] weights;
 
     /**
      * The activation threshold
      */
-    public int limit;
+    public double limit;
 
-    public SbPerceptron(int size, int limit) {
+    public SbPerceptron(int size, double limit) {
         this.sensors = new int[size];
-        this.weights = new int[size];
+        this.weights = new double[size];
         this.limit = limit;
     }
 
@@ -49,13 +49,13 @@ public class SbPerceptron implements Neuron {
 
     public void decreaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
-            if (this.sensors[link] == 1) this.weights[link] -= 1;
+            if (this.sensors[link] == 1) this.weights[link] -= .1d;
         }
     }
 
     public void increaseWeights() {
-        for (int i = 0; i < this.sensors.length; i++) {
-            if (this.sensors[i] == 1) this.weights[i] += 1;
+        for (int link = 0; link < this.sensors.length; link++) {
+            if (this.sensors[link] == 1) this.weights[link] += .1d;
         }
     }
 
@@ -63,7 +63,7 @@ public class SbPerceptron implements Neuron {
         return this.reaction;
     }
 
-    public int[] getWeights() {
+    public double[] getWeights() {
         return this.weights;
     }
 
@@ -71,7 +71,7 @@ public class SbPerceptron implements Neuron {
         this.sensors = sensors;
     }
 
-    private int toAssociate () {
+    private double toAssociate () {
         this.association = 0;
         for (int link = 0; link < this.sensors.length; link++) {
             this.association += this.sensors[link] * this.weights[link];
