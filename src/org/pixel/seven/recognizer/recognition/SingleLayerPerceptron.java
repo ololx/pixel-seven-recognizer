@@ -6,7 +6,7 @@ package org.pixel.seven.recognizer.recognition;
  * <p>
  * @author Alexander A. Kropotin
  */
-public class SbPerceptron implements Neuron {
+public class SingleLayerPerceptron implements Neuron {
 
     /**
      * The array of S-Elements (this.sensors)
@@ -32,9 +32,28 @@ public class SbPerceptron implements Neuron {
     /**
      * The activation threshold
      */
-    public double limit;
+    private double limit;
 
-    public SbPerceptron(int size, double limit) {
+    /**
+     * The weight step for inc/dec
+     */
+    private double step;
+
+    /**
+     * To setup defaults
+     */
+    {
+        this.step = .1d;
+    }
+
+    public SingleLayerPerceptron(int size, double limit, double step) {
+        this.sensors = new int[size];
+        this.weights = new double[size];
+        this.limit = limit;
+        this.step = step;
+    }
+
+    public SingleLayerPerceptron(int size, double limit) {
         this.sensors = new int[size];
         this.weights = new double[size];
         this.limit = limit;
@@ -49,13 +68,13 @@ public class SbPerceptron implements Neuron {
 
     public void decreaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
-            if (this.sensors[link] == 1) this.weights[link] -= .1d;
+            if (this.sensors[link] == 1) this.weights[link] -= this.step;
         }
     }
 
     public void increaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
-            if (this.sensors[link] == 1) this.weights[link] += .1d;
+            if (this.sensors[link] == 1) this.weights[link] += this.step;
         }
     }
 

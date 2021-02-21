@@ -1,6 +1,7 @@
 package org.pixel.seven.recognizer.drawing;
 
-import org.pixel.seven.recognizer.recognition.SbPerceptron;
+import org.pixel.seven.recognizer.image.ImageUtils;
+import org.pixel.seven.recognizer.recognition.SingleLayerPerceptron;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -8,8 +9,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.util.Arrays;
 
 /**
  * @project pixel-seven-recognizer
@@ -21,9 +20,9 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
 
     private BufferedImage image;
 
-    private SbPerceptron neuro;
+    private SingleLayerPerceptron neuro;
 
-    public DrawingFrame(SbPerceptron neuro, int width, int height) {
+    public DrawingFrame(SingleLayerPerceptron neuro, int width, int height) {
         this(width, height);
         this.neuro = neuro;
     }
@@ -71,14 +70,26 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        int[] pixels = new int[28 * 28];
-        image.getRGB(0, 0, 28, 28, pixels, 0, 28);
+        if (e.getButton() == 3) return;
+
+        int[] pixels = ImageUtils.cutEmpty(image);
         for (int j = 0; j < pixels.length; j++) {
             pixels[j] = pixels[j] == Color.WHITE.getRGB() ? 1 : 0;
         }
 
         neuro.start(pixels);
-        System.err.println(neuro.getReaction() == 1);
+
+        int color = neuro.getReaction() == 1 ? Color.GREEN.getRGB() : Color.RED.getRGB();
+        for (int px = 0; px < 28; px++) {
+            for (int py = 0; py < 28; py++) {
+                if (image.getRGB(px, py) == Color.BLACK.getRGB()) {
+                    image.setRGB(px, py, color);
+                }
+            }
+
+        }
+
+        this.draw(image, this.getWidth(), this.getHeight());
     }
 
     /**
@@ -117,11 +128,13 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
             if (weights[i] > maxW) maxW = weights[i];
         }
 
+        System.err.println("min = " + minW + ";   max = " + maxW);
+
         for (int x = 0; x < 28; x++) {
             for (int y = 0; y < 28; y++) {
                 if (weights[y + x * 28] == 0) color = Color.BLACK.getRGB();
-                else if (weights[y + x * 28] < 0) color = new Color((int) ((255 / minW) * (int) (weights[y + x * 28])), 0, 0).getRGB();
-                else if (weights[y + x * 28] > 0) color = new Color(0, (int) ((255 / maxW) * (int) (weights[y + x * 28])), 0).getRGB();
+                else if (weights[y + x * 28] < 0) color = new Color((int) ((255 / (minW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0, 0).getRGB();
+                else if (weights[y + x * 28] > 0) color = new Color(0, (int) ((255 / (maxW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0).getRGB();
 
                 image.setRGB(y, x, color);
             }

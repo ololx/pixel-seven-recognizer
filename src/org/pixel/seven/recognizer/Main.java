@@ -1,27 +1,21 @@
 package org.pixel.seven.recognizer;
 
 import org.pixel.seven.recognizer.drawing.DrawingFrame;
-import org.pixel.seven.recognizer.recognition.SbPerceptron;
+import org.pixel.seven.recognizer.image.ImageUtils;
+import org.pixel.seven.recognizer.recognition.SingleLayerPerceptron;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 
-    public static final int digit = 7;
+    public static final int digit = 3;
 
     public static void main(String[] args) throws IOException {
-        SbPerceptron neuro = new SbPerceptron(28 * 28, ((28 * 28) / 100) * 51);
+        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, ((28 * 28) / 100) * 75, .01d);
 
         File[] imagesFiles = new File("./input").listFiles();
         int samples = imagesFiles.length;
@@ -34,8 +28,7 @@ public class Main {
 
         int[][] inputs = new int[samples][784];
         for (int i = 0; i < samples; i++) {
-            int[] pixels = new int[28 * 28];
-            images[i].getRGB(0, 0, 28, 28, pixels, 0, 28);
+            int[] pixels = ImageUtils.cutEmpty(images[i]);
             for (int j = 0; j < pixels.length; j++) {
                 inputs[i][j] = pixels[j] == Color.BLACK.getRGB() ? 0 : 1;
             }
@@ -60,9 +53,11 @@ public class Main {
 
             prob = (100d / (samples)) * right;
             System.err.println("PR = " + prob);
-            if (prob >= 94) break;
+            if (prob >= 90) break;
         }
 
 	    new DrawingFrame(neuro, 28, 28).init();
     }
+
+
 }
