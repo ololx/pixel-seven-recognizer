@@ -28,8 +28,6 @@ public interface ImageUtils {
             }
         }
 
-        //System.err.println(minX + "|" + maxX + "|" + minY + "|" + maxY);
-
         BufferedImage resized = new BufferedImage(28, 28, image.getType());
         Graphics2D g = resized.createGraphics();
         BufferedImage subImage = image.getSubimage(minX, minY, maxX - minX, maxY - minY);
