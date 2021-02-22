@@ -155,22 +155,12 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
         int width = this.getSize().width;
         int x = (int) (xx * (1d * image.getWidth() / width));
         int y = (int) (yy * (1d * image.getHeight() / height));
-        int lx = x == 0 ? 0 : x - 1;
-        int rx = x == 27 ? 27 : x + 1;
-        int ly = x == 0 ? 0 : y - 1;
-        int ry = x == 27 ? 27 : y + 1;
 
 
         Graphics g = this.image.getGraphics();
         Graphics2D g2 = (Graphics2D)g;
         g2.setStroke(new  BasicStroke(3.0f));
         g2.drawLine(x, y, x, y);
-
-        /*for (int px = lx; px <= rx; px++) {
-            for (int py = ly; py <= ry; py++) {
-                image.setRGB(px, py, Color.WHITE.getRGB());
-            }
-        }*/
 
         this.draw(image, width, height);
     }

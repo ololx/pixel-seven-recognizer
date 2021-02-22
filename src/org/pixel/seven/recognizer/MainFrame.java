@@ -17,9 +17,11 @@
 package org.pixel.seven.recognizer;
 
 import org.pixel.seven.recognizer.drawing.DrawingFrame;
+import org.pixel.seven.recognizer.drawing.DrawingTablet;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * @project pixel-seven-recognizer
@@ -29,41 +31,26 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 
-    public void init() {
-        setSize(1366, 768);
-        setResizable(true);
+    public void paint(Graphics g) {
+        super.paint(g);
+    }
 
+    public void init(DrawingTablet drawing) {
+        drawing = drawing;
+        drawing.setBounds(30,30,500,500);
+        drawing.setBackground(Color.BLACK);
+        drawing.setOpaque(true);
+        drawing.setSize(600, 600);
+
+        setSize(1024, 1024);
+        setResizable(true);
         setTitle("Recognizer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBackground(Color.BLACK);
-
+        setLayout(null);
         setVisible(true);
 
-        DrawingFrame drawing = new DrawingFrame(28, 28);
-        JPanel mainPanel = new JPanel(new GridLayout(4, 1, 0, 0));
-        drawing.init();
+        add(drawing);
 
-        JLabel question = new JLabel("Please draw the 7");
-        question.setBackground(Color.BLUE);
 
-        JLabel answer = new JLabel("(x)(y)");
-        answer.setBackground(Color.BLUE);
-
-        JButton yesButton = new JButton("Yes");
-        yesButton.setBackground(Color.GREEN);
-
-        JButton noButton = new JButton("No");
-        noButton.setBackground(Color.RED);
-
-        mainPanel.add(question);
-        mainPanel.add(drawing);
-        mainPanel.add(answer);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(yesButton);
-        buttonPanel.add(noButton);
-        mainPanel.add(buttonPanel);
-
-        add(mainPanel);
     }
 }
