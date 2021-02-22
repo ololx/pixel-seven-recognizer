@@ -18,7 +18,7 @@ public class Main {
     public static final int digit = 3;
 
     public static void main(String[] args) throws IOException {
-        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, ((28 * 28) / 100) * 75, .01d);
+        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, ((28 * 28) / 100) * 90, .01d);
         DigitProcessor<BufferedImage> processor = new DigitProcessor<>(Color.BLACK.getRGB());
 
         File[] imagesFiles = new File("./input").listFiles();
