@@ -1,6 +1,8 @@
 package org.pixel.seven.recognizer.drawing;
 
-import org.pixel.seven.recognizer.image.ImageUtils;
+import org.pixel.seven.recognizer.image.DigitBufferedImage;
+import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
+import org.pixel.seven.recognizer.image.processing.DigitScaling;
 import org.pixel.seven.recognizer.recognition.SingleLayerPerceptron;
 
 import javax.swing.*;
@@ -72,7 +74,10 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == 3) return;
 
-        int[] pixels = ImageUtils.cutEmpty(image);
+        int[] pixels = new DigitBufferedImage(image).process(
+                new DigitAccentuation(),
+                new DigitScaling()
+        ).getPixels();
         for (int j = 0; j < pixels.length; j++) {
             pixels[j] = pixels[j] == Color.WHITE.getRGB() ? 1 : 0;
         }
@@ -117,30 +122,6 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
         addMouseListener(this);
         setSize(1024, 1024);
         setVisible(true);
-        this.paint();
-
-        double[] weights = neuro.getWeights();
-        int color = Color.BLACK.getRGB();
-
-        double minW = weights[0], maxW = weights[0];
-        for (int i = 0; i < weights.length; i++) {
-            if (weights[i] < minW) minW = weights[i];
-            if (weights[i] > maxW) maxW = weights[i];
-        }
-
-        System.err.println("min = " + minW + ";   max = " + maxW);
-
-        for (int x = 0; x < 28; x++) {
-            for (int y = 0; y < 28; y++) {
-                if (weights[y + x * 28] == 0) color = Color.BLACK.getRGB();
-                else if (weights[y + x * 28] < 0) color = new Color((int) ((255 / (minW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0, 0).getRGB();
-                else if (weights[y + x * 28] > 0) color = new Color(0, (int) ((255 / (maxW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0).getRGB();
-
-                image.setRGB(y, x, color);
-            }
-        }
-
-        this.draw(image, this.getWidth(), this.getHeight());
     }
 
     private void paint() {
@@ -159,7 +140,7 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
 
         Graphics g = this.image.getGraphics();
         Graphics2D g2 = (Graphics2D)g;
-        g2.setStroke(new  BasicStroke(3.0f));
+        g2.setStroke(new  BasicStroke(2.0f));
         g2.drawLine(x, y, x, y);
 
         this.draw(image, width, height);

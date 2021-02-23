@@ -16,12 +16,10 @@
  */
 package org.pixel.seven.recognizer;
 
-import org.pixel.seven.recognizer.drawing.DrawingFrame;
 import org.pixel.seven.recognizer.drawing.DrawingTablet;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 /**
  * @project pixel-seven-recognizer

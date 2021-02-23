@@ -72,8 +72,8 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
         @Override
         public void draw(DrawingSurface surface) {
             Graphics2D graphics = (Graphics2D) surface.getImage() .getGraphics();
-            graphics.setStroke(new  BasicStroke(3.0f));
-            graphics.setColor(Color.WHITE);
+            graphics.setStroke(this.size);
+            graphics.setColor(this.color);
             graphics.drawLine(posX, posY, posX, posY);
         }
 

@@ -3,9 +3,8 @@ package org.pixel.seven.recognizer;
 import org.pixel.seven.recognizer.drawing.DrawingFrame;
 import org.pixel.seven.recognizer.drawing.DrawingTablet;
 import org.pixel.seven.recognizer.image.DigitBufferedImage;
-import org.pixel.seven.recognizer.image.DigitImage;
-import org.pixel.seven.recognizer.image.ImageUtils;
-import org.pixel.seven.recognizer.image.processor.DigitProcessor;
+import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
+import org.pixel.seven.recognizer.image.processing.DigitScaling;
 import org.pixel.seven.recognizer.recognition.SingleLayerPerceptron;
 
 import javax.imageio.ImageIO;
@@ -19,22 +18,23 @@ public class Main {
 
     public static final int digit = 2;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, ((28 * 28) / 100) * 75, .01d);
-        DigitProcessor<BufferedImage> processor = new DigitProcessor<>(Color.BLACK.getRGB());
-
         File[] imagesFiles = new File("./input").listFiles();
         int samples = imagesFiles.length;
         DigitBufferedImage[] images = new DigitBufferedImage[samples];
         int[] digits = new int[samples];
         for (int i = 0; i < samples; i++) {
             images[i] = new DigitBufferedImage(ImageIO.read(imagesFiles[i]));
-            digits[i] = Integer.parseInt(imagesFiles[i].getName().charAt(10) + "");
+            digits[i] = Integer.parseInt(imagesFiles[i].getName().substring(10, 11));
         }
 
         int[][] inputs = new int[samples][784];
         for (int i = 0; i < samples; i++) {
-            int[] pixels = images[i].process(processor).getImageRGB();
+            int[] pixels = images[i].process(
+                    new DigitAccentuation(),
+                    new DigitScaling()
+            ).getPixels();
 
             for (int j = 0; j < pixels.length; j++) {
                 inputs[i][j] = pixels[j] == Color.BLACK.getRGB() ? 0 : 1;
@@ -79,7 +79,8 @@ public class Main {
                 BufferedImage image = new BufferedImage(28, 28, BufferedImage.TYPE_INT_RGB);
                 for (int x = 0; x < 28; x++) {
                     for (int y = 0; y < 28; y++) {
-                        if (weights[y + x * 28] == 0) color = Color.BLACK.getRGB();
+                        if (inputs[j][y + x * 28] != 0) color = Color.WHITE.getRGB();
+                        else if (weights[y + x * 28] == 0) color = Color.BLACK.getRGB();
                         else if (weights[y + x * 28] < 0) color = new Color((int) ((255 / (minW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0, 0).getRGB();
                         else if (weights[y + x * 28] > 0) color = new Color(0, (int) ((255 / (maxW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0).getRGB();
 
@@ -88,6 +89,7 @@ public class Main {
                 }
 
                 drawing.setCanvas(new DrawingTablet.Canvas(image));
+                //Thread.sleep(10);
             }
 
             prob = (100d / (samples)) * right;

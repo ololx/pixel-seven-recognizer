@@ -1,22 +1,4 @@
-/**
- * Copyright 2021 the project pixel-seven-recognizer authors
- * and the original author or authors annotated by {@author}
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package org.pixel.seven.recognizer.image.processor;
-
-import org.pixel.seven.recognizer.image.DigitBufferedImage;
+package org.pixel.seven.recognizer.image.processing;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -27,7 +9,9 @@ import java.awt.image.BufferedImage;
  * <p>
  * @author Alexander A. Kropotin
  */
-public class DigitProcessor<I extends BufferedImage> implements ImageProcessor<I> {
+public class DigitScaling<I extends BufferedImage> implements ImageProcessing<I> {
+
+    public static final int DEFAULT_BACKGROUND_COLOR = Color.BLACK.getRGB();
 
     private class Coordinates {
 
@@ -42,7 +26,11 @@ public class DigitProcessor<I extends BufferedImage> implements ImageProcessor<I
 
     private int backgroundColor;
 
-    public DigitProcessor(int backgroundColor) {
+    public DigitScaling() {
+        this(DEFAULT_BACKGROUND_COLOR);
+    }
+
+    public DigitScaling(int backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
@@ -74,15 +62,21 @@ public class DigitProcessor<I extends BufferedImage> implements ImageProcessor<I
                 || subImageCoordinates.maxX == image.getWidth()
                 || subImageCoordinates.maxY == image.getHeight()) return image;
 
-        BufferedImage resized = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
-        Graphics2D g = resized.createGraphics();
         BufferedImage subImage = image.getSubimage(
                 subImageCoordinates.minX,
                 subImageCoordinates.minY,
                 subImageCoordinates.maxX - subImageCoordinates.minX,
                 subImageCoordinates.maxY - subImageCoordinates.minY
         );
-        g.setRenderingHint(RenderingHints.KEY_RESOLUTION_VARIANT, RenderingHints.VALUE_RESOLUTION_VARIANT_BASE);
+
+        BufferedImage resized = new BufferedImage(
+                image.getWidth(),
+                image.getHeight(),
+                image.getType()
+        );
+
+        Graphics2D g = resized.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR); //produces a balanced resizing (fast and decent quality)
         g.drawImage(
                 subImage,
                 0, 0, resized.getWidth(), resized.getHeight(),

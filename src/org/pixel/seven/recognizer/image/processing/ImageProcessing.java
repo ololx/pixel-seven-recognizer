@@ -1,4 +1,4 @@
-package org.pixel.seven.recognizer.image.processor;
+package org.pixel.seven.recognizer.image.processing;
 
 import java.awt.image.BufferedImage;
 
@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
  * <p>
  * @author Alexander A. Kropotin
  */
-public interface ImageProcessor<I extends BufferedImage> {
+public interface ImageProcessing<I extends BufferedImage> {
 
     I apply(I image);
 }
