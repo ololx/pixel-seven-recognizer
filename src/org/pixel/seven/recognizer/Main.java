@@ -19,7 +19,8 @@ public class Main {
     public static final int digit = 2;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, ((28 * 28) / 100) * 75, .01d);
+        //SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, (summ) -> summ >= ((28 * 28) / 100) * 75 ? 1 : 0, .01d);
+        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, (summ) ->  1 / (1 + Math.exp(-summ)), .01d);
         File[] imagesFiles = new File("./input").listFiles();
         int samples = imagesFiles.length;
         DigitBufferedImage[] images = new DigitBufferedImage[samples];
@@ -89,13 +90,35 @@ public class Main {
                 }
 
                 drawing.setCanvas(new DrawingTablet.Canvas(image));
-                //Thread.sleep(10);
+                //Thread.sleep(1);
             }
 
             prob = (100d / (samples)) * right;
             System.err.println("PR = " + prob);
-            if (prob >= 90) break;
+            if (prob >= 96) break;
         }
+
+        double[] weights = neuro.getWeights();
+        int color = Color.BLACK.getRGB();
+
+        double minW = weights[0], maxW = weights[0];
+        for (int ii = 0; ii < weights.length; ii++) {
+            if (weights[ii] < minW) minW = weights[ii];
+            if (weights[ii] > maxW) maxW = weights[ii];
+        }
+
+        BufferedImage image = new BufferedImage(28, 28, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < 28; x++) {
+            for (int y = 0; y < 28; y++) {
+                if (weights[y + x * 28] == 0) color = Color.BLACK.getRGB();
+                else if (weights[y + x * 28] < 0) color = new Color((int) ((255 / (minW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0, 0).getRGB();
+                else if (weights[y + x * 28] > 0) color = new Color(0, (int) ((255 / (maxW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0).getRGB();
+
+                image.setRGB(y, x, color);
+            }
+        }
+
+        drawing.setCanvas(new DrawingTablet.Canvas(image));
 
 	    SwingUtilities.invokeLater(new  Runnable() {
             public void run() {

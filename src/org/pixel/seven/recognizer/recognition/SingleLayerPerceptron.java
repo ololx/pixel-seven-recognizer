@@ -9,6 +9,16 @@ package org.pixel.seven.recognizer.recognition;
 public class SingleLayerPerceptron implements Neuron {
 
     /**
+     * The default weight inc/dec step value
+     */
+    public static final double DEFAUL_EDUCATION_SPEED = .01d;
+
+    /**
+     * The default weight inc/dec step value
+     */
+    public static final Activation DEFAUL_ACTIVATION_FUNCTION = (summ) ->  1 / (1 + Math.exp(-summ));
+
+    /**
      * The array of S-Elements (this.sensors)
      */
     private int[] sensors;
@@ -32,49 +42,44 @@ public class SingleLayerPerceptron implements Neuron {
     /**
      * The activation threshold
      */
-    private double limit;
+    private Activation activation;
 
     /**
-     * The weight step for inc/dec
+     * The weight inc/dec step value
      */
-    private double step;
+    private double speed;
 
-    /**
-     * To setup defaults
-     */
-    {
-        this.step = .1d;
+    public SingleLayerPerceptron(int size) {
+        this(size, DEFAUL_ACTIVATION_FUNCTION, DEFAUL_EDUCATION_SPEED);
     }
 
-    public SingleLayerPerceptron(int size, double limit, double step) {
-        this.sensors = new int[size];
-        this.weights = new double[size];
-        this.limit = limit;
-        this.step = step;
+    public SingleLayerPerceptron(int size, Activation activation) {
+        this(size, activation, DEFAUL_EDUCATION_SPEED);
     }
 
-    public SingleLayerPerceptron(int size, double limit) {
+    public SingleLayerPerceptron(int size, Activation activation, double speed) {
         this.sensors = new int[size];
         this.weights = new double[size];
-        this.limit = limit;
+        this.activation = activation;
+        this.speed = speed;
     }
 
     public int start(int[] input) {
         this.sensors = input;
-        this.reaction = this.toAssociate() >= this.limit ? 1 : 0;
+        this.reaction = (int) (this.associate());
 
         return this.reaction;
     }
 
     public void decreaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
-            if (this.sensors[link] == 1) this.weights[link] -= this.step;
+            if (this.sensors[link] == 1) this.weights[link] -= this.speed;
         }
     }
 
     public void increaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
-            if (this.sensors[link] == 1) this.weights[link] += this.step;
+            if (this.sensors[link] == 1) this.weights[link] += this.speed;
         }
     }
 
@@ -90,12 +95,22 @@ public class SingleLayerPerceptron implements Neuron {
         this.sensors = sensors;
     }
 
-    private double toAssociate () {
-        this.association = 0;
-        for (int link = 0; link < this.sensors.length; link++) {
-            this.association += this.sensors[link] * this.weights[link];
-        }
+    private double associate() {
+        this.association = this.getActivationFunction(this.getWeightedSumm());
 
         return this.association;
+    }
+
+    private double getWeightedSumm() {
+        double summ = 0;
+        for (int link = 0; link < this.sensors.length; link++) {
+            summ += this.sensors[link] * this.weights[link];
+        }
+
+        return summ;
+    }
+
+    private double getActivationFunction(double summ) {
+        return this.activation.apply(summ);
     }
 }
