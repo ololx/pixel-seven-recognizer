@@ -1,12 +1,19 @@
 package org.pixel.seven.recognizer.recognition;
 
 /**
- * @project pixel-seven-recognizer
- * @created 19.02.2021 21:20
- * <p>
+ * The type Single layer perceptron.
+ *
  * @author Alexander A. Kropotin
+ * @project pixel -seven-recognizer
+ * @created 19.02.2021 21:20 <p>
  */
 public class SingleLayerPerceptron implements Neuron {
+
+    /**
+     * The type Binary adder.
+     */
+    private class BinaryAdder implements Adder {
+    }
 
     /**
      * The default weight inc/dec step value
@@ -16,22 +23,12 @@ public class SingleLayerPerceptron implements Neuron {
     /**
      * The default weight inc/dec step value
      */
-    public static final Activation DEFAUL_ACTIVATION_FUNCTION = (summ) ->  1 / (1 + Math.exp(-summ));
+    public static final ActivationFunction DEFAUL_ACTIVATION_FUNCTION = (summ) ->  1 / (1 + Math.exp(-summ));
 
     /**
-     * The array of S-Elements (this.sensors)
+     * The array of S-Elements (sensors)
      */
     private int[] sensors;
-
-    /**
-     * The one A-Elements (associative)
-     */
-    private double association;
-
-    /**
-     * The one R-Element (reactive)
-     */
-    private int reaction;
 
     /**
      * The weights of sensors
@@ -40,77 +37,123 @@ public class SingleLayerPerceptron implements Neuron {
     private double[] weights;
 
     /**
+     * The one A-Elements (associative)
+     */
+    private Adder adder;
+
+    /**
      * The activation threshold
      */
-    private Activation activation;
+    private ActivationFunction activation;
+
+    /**
+     * The one R-Element (reactive)
+     */
+    private double output;
 
     /**
      * The weight inc/dec step value
      */
     private double speed;
 
+    /**
+     * Instantiates a new Single layer perceptron.
+     *
+     * @param size the size
+     */
     public SingleLayerPerceptron(int size) {
         this(size, DEFAUL_ACTIVATION_FUNCTION, DEFAUL_EDUCATION_SPEED);
     }
 
-    public SingleLayerPerceptron(int size, Activation activation) {
+    /**
+     * Instantiates a new Single layer perceptron.
+     *
+     * @param size       the size
+     * @param activation the activation
+     */
+    public SingleLayerPerceptron(int size, ActivationFunction activation) {
         this(size, activation, DEFAUL_EDUCATION_SPEED);
     }
 
-    public SingleLayerPerceptron(int size, Activation activation, double speed) {
+    /**
+     * Instantiates a new Single layer perceptron.
+     *
+     * @param size       the size
+     * @param activation the activation
+     * @param speed      the speed
+     */
+    public SingleLayerPerceptron(int size, ActivationFunction activation, double speed) {
+        this.adder = new BinaryAdder();
         this.sensors = new int[size];
         this.weights = new double[size];
         this.activation = activation;
         this.speed = speed;
     }
 
-    public int start(int[] input) {
-        this.sensors = input;
-        this.reaction = (int) (this.associate());
+    /**
+     * Proceed double.
+     *
+     * @param input the input
+     * @return the double
+     */
+    public double proceed(int[] input) {
+        this.setSensors(input);
+        this.output = this.activation.calculate(this.adder.calculate(this.sensors, this.weights));
 
-        return this.reaction;
+        return this.output;
     }
 
+    /**
+     * Decrease weights.
+     */
     public void decreaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
             if (this.sensors[link] == 1) this.weights[link] -= this.speed;
         }
     }
 
+    /**
+     * Increase weights.
+     */
     public void increaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
             if (this.sensors[link] == 1) this.weights[link] += this.speed;
         }
     }
 
-    public int getReaction() {
-        return this.reaction;
+    /**
+     * Gets output.
+     *
+     * @return the output
+     */
+    public double getOutput() {
+        return this.output;
     }
 
+    /**
+     * Get weights double [ ].
+     *
+     * @return the double [ ]
+     */
     public double[] getWeights() {
         return this.weights;
     }
 
+    /**
+     * Sets weights.
+     *
+     * @param weights the weights
+     */
+    public void setWeights(double[] weights) {
+        this.weights = weights;
+    }
+
+    /**
+     * Sets sensors.
+     *
+     * @param sensors the sensors
+     */
     public void setSensors(int[] sensors) {
         this.sensors = sensors;
-    }
-
-    private double associate() {
-        this.association = this.getActivationFunction(this.getWeightedSumm());
-
-        return this.association;
-    }
-
-    private double getWeightedSumm() {
-        double summ = 0;
-        for (int link = 0; link < this.sensors.length; link++) {
-            summ += this.sensors[link] * this.weights[link];
-        }
-
-        return summ;
-    }
-
-    private double getActivationFunction(double summ) {
-        return this.activation.apply(summ);
     }
 }

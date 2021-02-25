@@ -46,10 +46,10 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
 
     public interface DrawingTool {
 
-        void draw(DrawingSurface surface);
+        void apply(DrawingSurface surface);
     }
 
-    public class Brush implements DrawingTool {
+    public class Pencil implements DrawingTool {
 
         private Color color;
 
@@ -59,18 +59,18 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
 
         private int posY;
 
-        public Brush() {
+        public Pencil() {
             this(1f, Color.BLACK);
         }
 
-        public Brush(float size, Color color) {
+        public Pencil(float size, Color color) {
             this.setSize(size);
             this.setColor(color);
             this.setPosition(0, 0);
         }
 
         @Override
-        public void draw(DrawingSurface surface) {
+        public void apply(DrawingSurface surface) {
             Graphics2D graphics = (Graphics2D) surface.getImage() .getGraphics();
             graphics.setStroke(this.size);
             graphics.setColor(this.color);
@@ -93,11 +93,11 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
 
     private Canvas canvas;
 
-    private Brush brush;
+    private Pencil brush;
 
     public DrawingTablet(int width, int height) {
         this.canvas = new Canvas(width, height);
-        this.brush = new Brush(3f, Color.WHITE);
+        this.brush = new Pencil(3f, Color.WHITE);
         Graphics2D d2 = this.canvas.getImage().createGraphics();
         d2.setColor(Color.BLACK);
         d2.fillRect(0, 0, width, height);
@@ -191,7 +191,7 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
     }
 
     private void paint() {
-        this.brush.draw(this.canvas);
+        this.brush.apply(this.canvas);
 
         this.repaint();
     }

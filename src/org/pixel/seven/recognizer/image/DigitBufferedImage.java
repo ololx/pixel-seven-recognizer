@@ -6,20 +6,36 @@ import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 /**
- * @project pixel-seven-recognizer
- * @created 21.02.2021 21:53
- * <p>
+ * The type Digit buffered image.
+ *
+ * @param <I> the type parameter
  * @author Alexander A. Kropotin
+ * @project pixel -seven-recognizer
+ * @created 21.02.2021 21:53 <p>
  */
 public class DigitBufferedImage<I extends BufferedImage> implements ProcessedImage<I> {
 
+    /**
+     * The Image.
+     */
     private I image;
 
+    /**
+     * Instantiates a new Digit buffered image.
+     *
+     * @param image the image
+     */
     public DigitBufferedImage(I image) {
         Objects.requireNonNull(image);
         this.image = image;
     }
 
+    /**
+     * Process digit buffered image.
+     *
+     * @param presets the presets
+     * @return the digit buffered image
+     */
     @Override
     public DigitBufferedImage process(ImageProcessing... presets) {
         for (ImageProcessing preset : presets) {
@@ -28,6 +44,11 @@ public class DigitBufferedImage<I extends BufferedImage> implements ProcessedIma
         return this;
     }
 
+    /**
+     * Get pixels int [ ].
+     *
+     * @return the int [ ]
+     */
     @Override
     public int[] getPixels() {
         int[] pixels = new int[this.image.getWidth() * this.image.getHeight()];
@@ -42,6 +63,11 @@ public class DigitBufferedImage<I extends BufferedImage> implements ProcessedIma
         );
     }
 
+    /**
+     * Gets image.
+     *
+     * @return the image
+     */
     @Override
     public I getImage() {
         return this.image;

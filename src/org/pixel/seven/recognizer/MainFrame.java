@@ -20,6 +20,8 @@ import org.pixel.seven.recognizer.drawing.DrawingTablet;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * @project pixel-seven-recognizer
@@ -29,15 +31,16 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 
-    public void paint(Graphics g) {
-        super.paint(g);
-    }
-
     public void init(DrawingTablet drawing) {
-        drawing = drawing;
+        addMouseListener(new  MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                System.err.println(e.getButton());
+            }
+        });
+
         drawing.setBounds(30,30,500,500);
         drawing.setBackground(Color.BLACK);
-        drawing.setOpaque(true);
+        //drawing.setOpaque(true);
         drawing.setSize(600, 600);
 
         setSize(1024, 1024);

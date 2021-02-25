@@ -82,9 +82,9 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
             pixels[j] = pixels[j] == Color.WHITE.getRGB() ? 1 : 0;
         }
 
-        neuro.start(pixels);
+        neuro.proceed(pixels);
 
-        int color = neuro.getReaction() == 1 ? Color.GREEN.getRGB() : Color.RED.getRGB();
+        int color = neuro.getOutput() == 1 ? Color.GREEN.getRGB() : Color.RED.getRGB();
         for (int px = 0; px < 28; px++) {
             for (int py = 0; py < 28; py++) {
                 if (image.getRGB(px, py) != Color.WHITE.getRGB()) {
@@ -93,6 +93,8 @@ public class DrawingFrame extends JFrame implements MouseMotionListener, MouseIn
             }
 
         }
+
+        System.out.println(neuro.getOutput());
 
         this.draw(image, this.getWidth(), this.getHeight());
     }

@@ -19,8 +19,7 @@ public class Main {
     public static final int digit = 2;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, (summ) -> summ >= ((28 * 28) / 100) * 75 ? 1 : 0, .01d);
-        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, (summ) ->  1 / (1 + Math.exp(-summ)), .01d);
+        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, (summ) ->  1 / (1 + Math.exp(-.25 * summ)), .01d);
         File[] imagesFiles = new File("./input").listFiles();
         int samples = imagesFiles.length;
         DigitBufferedImage[] images = new DigitBufferedImage[samples];
@@ -56,13 +55,13 @@ public class Main {
 
             for (int j = 0; j < samples; j++) {
                 int option = digits[j];
-                neuro.start(inputs[j]);
+                neuro.proceed(inputs[j]);
 
-                if (option != digit && neuro.getReaction() == 1) {
+                if (option != digit && neuro.getOutput() == 1) {
                     neuro.decreaseWeights();
-                } else if (option == digit && neuro.getReaction() != 1) {
+                } else if (option == digit && neuro.getOutput() != 1) {
                     neuro.increaseWeights();
-                } else if (option == digit && neuro.getReaction() == 1 || option != digit && neuro.getReaction() != 1) {
+                } else if (option == digit && neuro.getOutput() == 1 || option != digit && neuro.getOutput() != 1) {
                     right++;
                 }
 
