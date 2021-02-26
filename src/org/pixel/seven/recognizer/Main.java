@@ -1,6 +1,7 @@
 package org.pixel.seven.recognizer;
 
 import org.pixel.seven.recognizer.drawing.DrawingFrame;
+import org.pixel.seven.recognizer.drawing.surface.Canvas;
 import org.pixel.seven.recognizer.drawing.DrawingTablet;
 import org.pixel.seven.recognizer.image.DigitBufferedImage;
 import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
@@ -88,7 +89,7 @@ public class Main {
                     }
                 }
 
-                drawing.setCanvas(new DrawingTablet.Canvas(image));
+                drawing.setCanvas(new Canvas(image));
                 //Thread.sleep(1);
             }
 
@@ -117,7 +118,7 @@ public class Main {
             }
         }
 
-        drawing.setCanvas(new DrawingTablet.Canvas(image));
+        drawing.setCanvas(new Canvas(image));
 
 	    SwingUtilities.invokeLater(new  Runnable() {
             public void run() {

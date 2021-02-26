@@ -1,12 +1,13 @@
 package org.pixel.seven.recognizer.drawing;
 
+import org.pixel.seven.recognizer.drawing.surface.Canvas;
+import org.pixel.seven.recognizer.drawing.tool.Pencil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
-import java.util.Objects;
 
 /**
  * @project pixel-seven-recognizer
@@ -15,81 +16,6 @@ import java.util.Objects;
  * @author Alexander A. Kropotin
  */
 public class DrawingTablet extends JPanel implements MouseListener, MouseMotionListener {
-
-    public interface DrawingSurface {
-
-        BufferedImage getImage();
-    }
-
-    public static class Canvas implements DrawingSurface {
-
-        private BufferedImage image;
-
-        public Canvas(int width, int height) {
-            this(width, height, BufferedImage.TYPE_INT_RGB);
-        }
-
-        public Canvas(int width, int height, int imageType) {
-            this(new  BufferedImage(width, height, imageType));
-        }
-
-        public Canvas(BufferedImage image) {
-            Objects.requireNonNull(image, "The image couldn't be null");
-            this.image = image;
-        }
-
-        @Override
-        public BufferedImage getImage() {
-            return this.image;
-        }
-    }
-
-    public interface DrawingTool {
-
-        void apply(DrawingSurface surface);
-    }
-
-    public class Pencil implements DrawingTool {
-
-        private Color color;
-
-        private Stroke size;
-
-        private int posX;
-
-        private int posY;
-
-        public Pencil() {
-            this(1f, Color.BLACK);
-        }
-
-        public Pencil(float size, Color color) {
-            this.setSize(size);
-            this.setColor(color);
-            this.setPosition(0, 0);
-        }
-
-        @Override
-        public void apply(DrawingSurface surface) {
-            Graphics2D graphics = (Graphics2D) surface.getImage() .getGraphics();
-            graphics.setStroke(this.size);
-            graphics.setColor(this.color);
-            graphics.drawLine(posX, posY, posX, posY);
-        }
-
-        public void setPosition(int posX, int posY) {
-            this.posX = posX;
-            this.posY = posY;
-        }
-
-        public void setSize(float size) {
-            this.size = new BasicStroke(size);
-        }
-
-        public void setColor(Color color) {
-            this.color = color;
-        }
-    }
 
     private Canvas canvas;
 
@@ -192,7 +118,6 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
 
     private void paint() {
         this.brush.apply(this.canvas);
-
         this.repaint();
     }
 
