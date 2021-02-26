@@ -10,15 +10,9 @@ import java.awt.*;
  * <p>
  * @author Alexander A. Kropotin
  */
-public class Pencil implements DrawingTool {
+public class Pencil extends AbstractDrawingTool implements ColoringTool {
 
-    private Color color;
-
-    private Stroke size;
-
-    private int posX;
-
-    private int posY;
+    private int color;
 
     public Pencil() {
         this(1f, Color.BLACK);
@@ -27,27 +21,28 @@ public class Pencil implements DrawingTool {
     public Pencil(float size, Color color) {
         this.setSize(size);
         this.setColor(color);
-        this.setPosition(0, 0);
+        this.setPosition(new Position());
     }
 
     @Override
     public void apply(DrawingSurface surface) {
         Graphics2D graphics = (Graphics2D) surface.getImage() .getGraphics();
-        graphics.setStroke(this.size);
-        graphics.setColor(this.color);
-        graphics.drawLine(posX, posY, posX, posY);
-    }
-
-    public void setPosition(int posX, int posY) {
-        this.posX = posX;
-        this.posY = posY;
-    }
-
-    public void setSize(float size) {
-        this.size = new BasicStroke(size);
+        graphics.setStroke(new BasicStroke(this.size));
+        graphics.setColor(new Color(this.color));
+        graphics.drawLine(
+                this.position.getX(),
+                this.position.getY(),
+                this.position.getX(),
+                this.position.getY()
+        );
     }
 
     public void setColor(Color color) {
+        this.setColor(color.getRGB());
+    }
+
+    @Override
+    public void setColor(int color) {
         this.color = color;
     }
 }

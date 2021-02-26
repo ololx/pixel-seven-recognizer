@@ -1,6 +1,7 @@
 package org.pixel.seven.recognizer.drawing;
 
 import org.pixel.seven.recognizer.drawing.surface.Canvas;
+import org.pixel.seven.recognizer.drawing.tool.DrawingTool;
 import org.pixel.seven.recognizer.drawing.tool.Pencil;
 
 import javax.swing.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Dimension2D;
 
 /**
  * @project pixel-seven-recognizer
@@ -127,7 +129,7 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
         int x = (int) (mouseX * (1d * this.canvas.getImage().getWidth() / width));
         int y = (int) (mouseY * (1d * this.canvas.getImage().getHeight() / height));
 
-        this.brush.setPosition(x, y);
+        this.brush.setPosition(DrawingTool.Position.of(x, y));
     }
 
     public Canvas getCanvas() {
