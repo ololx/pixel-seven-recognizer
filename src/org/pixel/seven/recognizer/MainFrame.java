@@ -32,16 +32,12 @@ import java.awt.event.MouseEvent;
 public class MainFrame extends JFrame {
 
     public void init(DrawingTablet drawing) {
-        addMouseListener(new  MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                System.err.println(e.getButton());
-            }
-        });
-
-        drawing.setBounds(30,30,500,500);
+        JToolBar toolbar = new  JToolBar("Toolbar", JToolBar.VERTICAL);
+        toolbar.setBounds(0, 0, 100, 600);
+        drawing.setBounds(100,0,700,600);
         drawing.setBackground(Color.BLACK);
         //drawing.setOpaque(true);
-        drawing.setSize(600, 600);
+        //drawing.setSize(600, 600);
 
         setSize(1024, 1024);
         setResizable(true);
@@ -50,8 +46,9 @@ public class MainFrame extends JFrame {
         setLayout(null);
         setVisible(true);
 
+        add(toolbar);
         add(drawing);
 
-
+        setBackground(Color.BLACK);
     }
 }
