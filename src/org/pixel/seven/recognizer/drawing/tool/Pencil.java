@@ -5,25 +5,38 @@ import org.pixel.seven.recognizer.drawing.surface.DrawingSurface;
 import java.awt.*;
 
 /**
- * @project pixel-seven-recognizer
- * @created 26.02.2021 15:40
- * <p>
+ * The type Pencil.
+ *
  * @author Alexander A. Kropotin
+ * @project pixel -seven-recognizer
+ * @created 26.02.2021 15:40 <p>
  */
-public class Pencil extends AbstractDrawingTool implements ColoringTool {
+public class Pencil extends AbstractColoringTool {
 
-    private int color;
-
+    /**
+     * Instantiates a new Pencil.
+     */
     public Pencil() {
-        this(1f, Color.BLACK);
+        this(1f, Color.BLACK.getRGB());
     }
 
-    public Pencil(float size, Color color) {
+    /**
+     * Instantiates a new Pencil.
+     *
+     * @param size  the size
+     * @param color the color
+     */
+    public Pencil(float size, int color) {
         this.setSize(size);
         this.setColor(color);
         this.setPosition(new Position());
     }
 
+    /**
+     * Apply.
+     *
+     * @param surface the surface
+     */
     @Override
     public void apply(DrawingSurface surface) {
         Graphics2D graphics = (Graphics2D) surface.getImage() .getGraphics();
@@ -35,14 +48,5 @@ public class Pencil extends AbstractDrawingTool implements ColoringTool {
                 this.position.getX(),
                 this.position.getY()
         );
-    }
-
-    public void setColor(Color color) {
-        this.setColor(color.getRGB());
-    }
-
-    @Override
-    public void setColor(int color) {
-        this.color = color;
     }
 }

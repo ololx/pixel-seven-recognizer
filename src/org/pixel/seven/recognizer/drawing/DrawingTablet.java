@@ -25,7 +25,7 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
 
     public DrawingTablet(int width, int height) {
         this.canvas = new Canvas(width, height);
-        this.brush = new Pencil(3f, Color.WHITE);
+        this.brush = new Pencil(3f, Color.WHITE.getRGB());
         Graphics2D d2 = this.canvas.getImage().createGraphics();
         d2.setColor(Color.BLACK);
         d2.fillRect(0, 0, width, height);

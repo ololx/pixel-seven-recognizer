@@ -12,6 +12,8 @@ public interface DrawingSurface {
 
     BufferedImage getImage();
 
+    int getBackground();
+
     default int getXScaling(int width) {
         return (int) (1d * this.getImage().getWidth() / width);
     }
