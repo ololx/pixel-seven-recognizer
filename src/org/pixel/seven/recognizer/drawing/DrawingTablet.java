@@ -2,6 +2,7 @@ package org.pixel.seven.recognizer.drawing;
 
 import org.pixel.seven.recognizer.drawing.surface.Canvas;
 import org.pixel.seven.recognizer.drawing.tool.DrawingTool;
+import org.pixel.seven.recognizer.drawing.tool.Eraser;
 import org.pixel.seven.recognizer.drawing.tool.Filling;
 import org.pixel.seven.recognizer.drawing.tool.Pencil;
 
@@ -22,13 +23,13 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
 
     private Canvas canvas;
 
-    private Pencil brush;
+    private DrawingTool brush;
 
     private DrawingTool filling;
 
     public DrawingTablet(int width, int height) {
         this.canvas = new Canvas(width, height);
-        this.brush = new Pencil(3f, Color.WHITE.getRGB());
+        this.brush = new Eraser(3f);
         this.filling = new Filling(1f, Color.RED.getRGB());
         Graphics2D d2 = this.canvas.getImage().createGraphics();
         d2.setColor(Color.BLACK);
