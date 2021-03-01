@@ -51,14 +51,15 @@ public class Filling extends AbstractColoringTool {
                 this.position.getY(),
                 0,
                 surface.getImage().getHeight() - 1,
-                surface.getImage()
+                surface.getImage(),
+                surface.getImage().getRGB(this.position.getX(), this.position.getY())
         );
     }
 
-    private void fill(Graphics2D graphics, int x, int minX, int maxX, int y, int minY, int maxY, BufferedImage image) {
+    private void fill(Graphics2D graphics, int x, int minX, int maxX, int y, int minY, int maxY, BufferedImage image, int bclr) {
         if (x < minX || x > maxX || y < minY || y > maxY) return;
-        else if (image.getRGB(x, y) == this.color) return;
-        else if (image.getRGB(x, y) == Color.WHITE.getRGB()) return;
+        else if (image.getRGB(x, y) == graphics.getColor().getRGB()) return;
+        else if (image.getRGB(x, y) != bclr) return;
 
         graphics.drawLine(x, y, x, y);
 
@@ -70,7 +71,8 @@ public class Filling extends AbstractColoringTool {
                 y,
                 minY,
                 maxY,
-                image
+                image,
+                bclr
         );
 
         this.fill(
@@ -81,7 +83,8 @@ public class Filling extends AbstractColoringTool {
                 y - 1,
                 minY,
                 maxY,
-                image
+                image,
+                bclr
         );
 
         this.fill(
@@ -92,7 +95,8 @@ public class Filling extends AbstractColoringTool {
                 y,
                 minY,
                 maxY,
-                image
+                image,
+                bclr
         );
 
         this.fill(
@@ -103,7 +107,8 @@ public class Filling extends AbstractColoringTool {
                 y + 1,
                 minY,
                 maxY,
-                image
+                image,
+                bclr
         );
     }
 }
