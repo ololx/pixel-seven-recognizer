@@ -118,7 +118,7 @@ public class Main {
             }
         }
 
-        drawing.setCanvas(new Canvas(image));
+        drawing.repaint();
 
 	    SwingUtilities.invokeLater(new  Runnable() {
             public void run() {

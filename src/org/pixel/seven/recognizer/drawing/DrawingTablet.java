@@ -2,6 +2,7 @@ package org.pixel.seven.recognizer.drawing;
 
 import org.pixel.seven.recognizer.drawing.surface.Canvas;
 import org.pixel.seven.recognizer.drawing.tool.DrawingTool;
+import org.pixel.seven.recognizer.drawing.tool.Filling;
 import org.pixel.seven.recognizer.drawing.tool.Pencil;
 
 import javax.swing.*;
@@ -23,9 +24,12 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
 
     private Pencil brush;
 
+    private DrawingTool filling;
+
     public DrawingTablet(int width, int height) {
         this.canvas = new Canvas(width, height);
         this.brush = new Pencil(3f, Color.WHITE.getRGB());
+        this.filling = new Filling(1f, Color.RED.getRGB());
         Graphics2D d2 = this.canvas.getImage().createGraphics();
         d2.setColor(Color.BLACK);
         d2.fillRect(0, 0, width, height);
@@ -47,7 +51,11 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        this.paint();
+        if (e.getButton() == 3) {
+            this.setPosition(e.getX(), e.getY(), this.filling);
+            this.filling.apply(this.canvas);
+            this.repaint();
+        } else this.paint();
     }
 
     /**
@@ -67,7 +75,7 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        this.paint();
+        //this.paint();
     }
 
     /**
@@ -130,6 +138,17 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
         int y = (int) (mouseY * (1d * this.canvas.getImage().getHeight() / height));
 
         this.brush.setPosition(DrawingTool.Position.of(x, y));
+    }
+
+    private DrawingTool setPosition(int mouseX, int mouseY, DrawingTool tool) {
+        int height = this.getHeight();
+        int width = this.getWidth();
+        int x = (int) (mouseX * (1d * this.canvas.getImage().getWidth() / width));
+        int y = (int) (mouseY * (1d * this.canvas.getImage().getHeight() / height));
+
+        tool.setPosition(DrawingTool.Position.of(x, y));
+
+        return tool;
     }
 
     public Canvas getCanvas() {
