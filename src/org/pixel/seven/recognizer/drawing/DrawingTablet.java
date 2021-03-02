@@ -11,7 +11,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Dimension2D;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @project pixel-seven-recognizer
@@ -21,16 +22,20 @@ import java.awt.geom.Dimension2D;
  */
 public class DrawingTablet extends JPanel implements MouseListener, MouseMotionListener {
 
+    public static final Map<String, DrawingTool> TOOLS = new HashMap<String, DrawingTool>() {{
+        put("pencil", new Pencil(3f, Color.WHITE.getRGB()));
+        put("eraser", new Eraser(10f));
+        put("filling", new Filling(1f, Color.BLACK.getRGB()));
+    }};
+
     private Canvas canvas;
 
-    private DrawingTool brush;
-
-    private DrawingTool filling;
+    private DrawingTool tool;
 
     public DrawingTablet(int width, int height) {
         this.canvas = new Canvas(width, height);
-        this.brush = new Eraser(3f);
-        this.filling = new Filling(1f, Color.RED.getRGB());
+        this.tool = TOOLS.get("pencil");
+
         Graphics2D d2 = this.canvas.getImage().createGraphics();
         d2.setColor(Color.BLACK);
         d2.fillRect(0, 0, width, height);
@@ -52,11 +57,6 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == 3) {
-            this.setPosition(e.getX(), e.getY(), this.filling);
-            this.filling.apply(this.canvas);
-            this.repaint();
-        } else this.paint();
     }
 
     /**
@@ -76,7 +76,8 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        //this.paint();
+        this.setPosition(e.getX(), e.getY(), this.tool);
+        this.paint();
     }
 
     /**
@@ -113,7 +114,7 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
      */
     @Override
     public void mouseDragged(MouseEvent e) {
-        this.setBrushPosition(e.getX(), e.getY());
+        this.setPosition(e.getX(), e.getY(), this.tool);
         this.paint();
     }
 
@@ -128,7 +129,7 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
     }
 
     private void paint() {
-        this.brush.apply(this.canvas);
+        this.tool.apply(this.canvas);
         this.repaint();
     }
 
@@ -138,7 +139,7 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
         int x = (int) (mouseX * (1d * this.canvas.getImage().getWidth() / width));
         int y = (int) (mouseY * (1d * this.canvas.getImage().getHeight() / height));
 
-        this.brush.setPosition(DrawingTool.Position.of(x, y));
+        this.tool.setPosition(DrawingTool.Position.of(x, y));
     }
 
     private DrawingTool setPosition(int mouseX, int mouseY, DrawingTool tool) {
@@ -159,5 +160,9 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
         this.repaint();
+    }
+
+    public void setActiveTool(DrawingTool tool) {
+        this.tool = tool;
     }
 }

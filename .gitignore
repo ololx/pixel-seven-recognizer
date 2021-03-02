@@ -28,13 +28,14 @@ hs_err_pid*
 # compiled ant specific
 dist/
 build/
+out/
 
 # compiled maven specific
-log/*
-target/*
+log/
+target/
 
 # intelliJ IDEA specific
-.idea/*
+.idea/
 *.iml
 *.iws
 

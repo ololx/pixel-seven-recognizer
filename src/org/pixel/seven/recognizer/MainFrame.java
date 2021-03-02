@@ -1,25 +1,11 @@
-/**
- * Copyright 2021 the project pixel-seven-recognizer authors
- * and the original author or authors annotated by {@author}
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.pixel.seven.recognizer;
 
 import org.pixel.seven.recognizer.drawing.DrawingTablet;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,11 +19,39 @@ public class MainFrame extends JFrame {
 
     public void init(DrawingTablet drawing) {
         JToolBar toolbar = new  JToolBar("Toolbar", JToolBar.VERTICAL);
-        toolbar.setBounds(0, 0, 100, 600);
-        drawing.setBounds(100,0,700,600);
+        toolbar.setBounds(0, 0, 25, 600);
+
+        JButton pencil = new  JButton(new  ImageIcon("src/resources/pencil.png"));
+        pencil.setBounds(0, 0, 25, 100);
+        pencil.addActionListener(new  ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                drawing.setActiveTool(DrawingTablet.TOOLS.get("pencil"));
+            }
+        });
+        toolbar.add(pencil);
+
+        JButton filling = new  JButton(new  ImageIcon("src/resources/filling.png"));
+        filling.setBounds(0, 0, 25, 100);
+        filling.addActionListener(new  ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                drawing.setActiveTool(DrawingTablet.TOOLS.get("filling"));
+            }
+        });
+        toolbar.add(filling);
+
+        JButton eraser = new  JButton(new  ImageIcon("src/resources/eraser.png"));
+        eraser.setBounds(0, 0, 25, 100);
+        eraser.addActionListener(new  ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                drawing.setActiveTool(DrawingTablet.TOOLS.get("eraser"));
+            }
+        });
+        toolbar.add(eraser);
+
+
+        drawing.setBounds(25,0,625,600);
         drawing.setBackground(Color.BLACK);
-        //drawing.setOpaque(true);
-        //drawing.setSize(600, 600);
+        drawing.setOpaque(true);
 
         setSize(1024, 1024);
         setResizable(true);
