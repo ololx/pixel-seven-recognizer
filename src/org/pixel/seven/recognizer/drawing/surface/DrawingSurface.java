@@ -14,11 +14,19 @@ public interface DrawingSurface {
 
     int getBackground();
 
-    default int getXScaling(int width) {
-        return (int) (1d * this.getImage().getWidth() / width);
+    default int getXScaled(int x, int width) {
+        return (int) (x * getWidthScaling(width));
     }
 
-    default int getYScaling(int height) {
-        return (int) (1d * this.getImage().getHeight() / height);
+    default int getYScaled(int y, int height) {
+        return (int) (y * getHeigthScale(height));
+    }
+
+    default double getWidthScaling(int width) {
+        return 1d * this.getImage().getWidth() / width;
+    }
+
+    default double getHeigthScale(int height) {
+        return 1d * this.getImage().getHeight() / height;
     }
 }

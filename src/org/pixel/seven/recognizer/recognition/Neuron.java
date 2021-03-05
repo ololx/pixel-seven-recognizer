@@ -46,7 +46,7 @@ public interface Neuron {
 
     enum ActivationFunctions {
 
-        SIGMOID(association ->  1 / (1 + Math.exp(-0.25 * association))),
+        SIGMOID(association ->  1 / (1 + Math.exp(-.25 * association))),
         HYPERBOLIC_TANGENT(association -> Math.tan(association / 1));
 
         private ActivationFunction activationFunction;

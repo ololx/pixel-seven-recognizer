@@ -76,7 +76,6 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        this.setPosition(e.getX(), e.getY(), this.tool);
         this.paint();
     }
 
@@ -125,7 +124,7 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
      */
     @Override
     public void mouseMoved(MouseEvent e) {
-        this.setBrushPosition(e.getX(), e.getY());
+        this.setPosition(e.getX(), e.getY(), this.tool);
     }
 
     private void paint() {
@@ -133,21 +132,9 @@ public class DrawingTablet extends JPanel implements MouseListener, MouseMotionL
         this.repaint();
     }
 
-    private void setBrushPosition(int mouseX, int mouseY) {
-        int height = this.getHeight();
-        int width = this.getWidth();
-        int x = (int) (mouseX * (1d * this.canvas.getImage().getWidth() / width));
-        int y = (int) (mouseY * (1d * this.canvas.getImage().getHeight() / height));
-
-        this.tool.setPosition(DrawingTool.Position.of(x, y));
-    }
-
     private DrawingTool setPosition(int mouseX, int mouseY, DrawingTool tool) {
-        int height = this.getHeight();
-        int width = this.getWidth();
-        int x = (int) (mouseX * (1d * this.canvas.getImage().getWidth() / width));
-        int y = (int) (mouseY * (1d * this.canvas.getImage().getHeight() / height));
-
+        int x = this.canvas.getXScaled(mouseX, this.getWidth());
+        int y = this.canvas.getYScaled(mouseY, this.getHeight());
         tool.setPosition(DrawingTool.Position.of(x, y));
 
         return tool;
