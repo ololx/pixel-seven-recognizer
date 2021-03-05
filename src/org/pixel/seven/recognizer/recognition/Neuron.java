@@ -34,6 +34,7 @@ public interface Neuron {
      * The interface Activation function.
      */
     interface ActivationFunction {
+
         /**
          * Calculate double.
          *
@@ -41,5 +42,21 @@ public interface Neuron {
          * @return the double
          */
         double calculate(double association);
+    }
+
+    enum ActivationFunctions {
+
+        SIGMOID(association ->  1 / (1 + Math.exp(-0.25 * association))),
+        HYPERBOLIC_TANGENT(association -> Math.tan(association / 1));
+
+        private ActivationFunction activationFunction;
+
+        ActivationFunctions(ActivationFunction activationFunction) {
+            this.activationFunction = activationFunction;
+        }
+
+        public ActivationFunction getActivationFunction() {
+            return this.activationFunction;
+        }
     }
 }

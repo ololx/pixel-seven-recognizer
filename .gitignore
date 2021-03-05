@@ -45,13 +45,14 @@ target/
 .settings/
 
 # netbeans specific
-core/*
-nbproject/*
+core/
+nbproject/
 !nbproject/project.properties
 !nbproject/project.xml
 
 # project specific
-input/*
+input/
+src/resources/
 
 # general exclude
 !.gitignore

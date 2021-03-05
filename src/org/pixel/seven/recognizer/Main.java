@@ -6,6 +6,7 @@ import org.pixel.seven.recognizer.drawing.DrawingTablet;
 import org.pixel.seven.recognizer.image.DigitBufferedImage;
 import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
 import org.pixel.seven.recognizer.image.processing.DigitScaling;
+import org.pixel.seven.recognizer.recognition.Neuron;
 import org.pixel.seven.recognizer.recognition.SingleLayerPerceptron;
 
 import javax.imageio.ImageIO;
@@ -20,7 +21,7 @@ public class Main {
     public static final int digit = 2;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, (summ) ->  1 / (1 + Math.exp(-.25 * summ)), .01d);
+        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, Neuron.ActivationFunctions.SIGMOID.getActivationFunction(), .01d);
         File[] imagesFiles = new File("./input").listFiles();
         int samples = imagesFiles.length;
         DigitBufferedImage[] images = new DigitBufferedImage[samples];
@@ -95,7 +96,7 @@ public class Main {
 
             prob = (100d / (samples)) * right;
             System.err.println("PR = " + prob);
-            if (prob >= 96) break;
+            if (prob >= 97) break;
         }
 
         double[] weights = neuro.getWeights();
