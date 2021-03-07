@@ -13,6 +13,7 @@ public interface Neuron {
      * The interface Adder.
      */
     interface Adder {
+
         /**
          * Calculate double.
          *

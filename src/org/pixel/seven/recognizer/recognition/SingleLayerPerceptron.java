@@ -18,12 +18,12 @@ public class SingleLayerPerceptron implements Neuron {
     /**
      * The default weight inc/dec step value
      */
-    public static final double DEFAUL_EDUCATION_SPEED = .01d;
+    public static final double DEFAULT_EDUCATION_SPEED = .01d;
 
     /**
      * The default weight inc/dec step value
      */
-    public static final ActivationFunction DEFAUL_ACTIVATION_FUNCTION = (summ) ->  1 / (1 + Math.exp(-summ));
+    public static final ActivationFunction DEFAULT_ACTIVATION_FUNCTION = ActivationFunctions.SIGMOID.getActivationFunction();
 
     /**
      * The array of S-Elements (sensors)
@@ -62,7 +62,7 @@ public class SingleLayerPerceptron implements Neuron {
      * @param size the size
      */
     public SingleLayerPerceptron(int size) {
-        this(size, DEFAUL_ACTIVATION_FUNCTION, DEFAUL_EDUCATION_SPEED);
+        this(size, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_EDUCATION_SPEED);
     }
 
     /**
@@ -72,7 +72,7 @@ public class SingleLayerPerceptron implements Neuron {
      * @param activation the activation
      */
     public SingleLayerPerceptron(int size, ActivationFunction activation) {
-        this(size, activation, DEFAUL_EDUCATION_SPEED);
+        this(size, activation, DEFAULT_EDUCATION_SPEED);
     }
 
     /**
