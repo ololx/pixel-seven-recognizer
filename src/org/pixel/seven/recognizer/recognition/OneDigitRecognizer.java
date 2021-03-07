@@ -1,6 +1,7 @@
 package org.pixel.seven.recognizer.recognition;
 
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 /**
  * @project pixel-seven-recognizer
@@ -9,6 +10,13 @@ import java.awt.image.BufferedImage;
  * @author Alexander A. Kropotin
  */
 public class OneDigitRecognizer implements Recognizer<BufferedImage> {
+
+    private Configuration configuration;
+
+    public OneDigitRecognizer(Configuration configuration) {
+        Objects.requireNonNull(configuration, "The configuration couldn't be null");
+        this.configuration = configuration;
+    }
 
     @Override
     public void recognize(BufferedImage input) {
