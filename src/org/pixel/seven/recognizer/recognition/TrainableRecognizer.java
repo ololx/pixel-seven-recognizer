@@ -1,5 +1,7 @@
 package org.pixel.seven.recognizer.recognition;
 
+import org.pixel.seven.recognizer.drawing.DrawingTablet;
+
 /**
  * The interface Trainable.
  *
@@ -15,5 +17,5 @@ public interface TrainableRecognizer<S> {
      * @param samples the samples
      * @return the boolean
      */
-    boolean retrain(S... samples);
+    boolean retrain(DrawingTablet observer, S... samples);
 }

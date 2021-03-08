@@ -1,10 +1,23 @@
 package org.pixel.seven.recognizer.recognition;
 
+import org.pixel.seven.recognizer.MainFrame;
+import org.pixel.seven.recognizer.drawing.DrawingPanel;
+import org.pixel.seven.recognizer.drawing.DrawingTablet;
+import org.pixel.seven.recognizer.drawing.surface.Canvas;
+import org.pixel.seven.recognizer.image.DigitBufferedImage;
+import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
+import org.pixel.seven.recognizer.image.processing.DigitScaling;
 import org.pixel.seven.recognizer.recognition.nn.NNet;
+import org.pixel.seven.recognizer.recognition.nn.Neuron;
 import org.pixel.seven.recognizer.recognition.nn.SingleLayerPerceptron;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 /**
  * @project pixel-seven-recognizer
@@ -14,9 +27,15 @@ import java.util.Objects;
  */
 public class DigitBinaryClassifier implements Recognizer<BufferedImage>, TrainableRecognizer<Sample> {
 
+    private Logger log;
+
     private NNet network;
 
     private Configuration cfg;
+
+    {
+        this.log = Logger.getLogger(this.getClass().getName());
+    }
 
     public DigitBinaryClassifier(Configuration cfg) {
         Objects.requireNonNull(cfg, "The configuration couldn't be null");
@@ -36,8 +55,60 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage>, Trainab
      * @return the boolean
      */
     @Override
-    public boolean retrain(Sample... samples) {
-        return false;
+    public boolean retrain(DrawingTablet observer, Sample... samples) {
+        int samplesCount = samples.length;
+        double probability = 0, maxProbability = 0, right = 0;
+        do {
+            maxProbability = probability;
+            right = 0;
+            for (Sample sample : samples) {
+                int[] input = new DigitBufferedImage(sample.getSample())
+                        .process(
+                                new DigitAccentuation(),
+                                new DigitScaling()
+                        ).getPixels();
+                int value = sample.getValue();
+
+                this.network.proceed(input);
+
+                if (value != 2 && this.network.getOutput() == 1) {
+                    this.network.decreaseWeights();
+                } else if (value == 2 && this.network.getOutput() != 1) {
+                    this.network.increaseWeights();
+                } else if (value == 2 && this.network.getOutput() == 1 || value != 2 && this.network.getOutput() != 1) {
+                    right++;
+                }
+
+                double[] weights = this.network.getWeights();
+                double minW = weights[0], maxW = weights[0];
+                for (int ii = 0; ii < weights.length; ii++) {
+                    if (weights[ii] < minW) minW = weights[ii];
+                    if (weights[ii] > maxW) maxW = weights[ii];
+                }
+
+                System.err.println("min = " + minW + ";   max = " + maxW);
+
+                //FIXME:: Заменить на обсервера потом
+                int color = Color.BLACK.getRGB();
+                BufferedImage image = new BufferedImage(28, 28, BufferedImage.TYPE_INT_RGB);
+                for (int x = 0; x < 28; x++) {
+                    for (int y = 0; y < 28; y++) {
+                        if (weights[y + x * 28] == 0) color = Color.BLACK.getRGB();
+                        else if (weights[y + x * 28] < 0) color = new Color((int) ((255 / (minW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0, 0).getRGB();
+                        else if (weights[y + x * 28] > 0) color = new Color(0, (int) ((255 / (maxW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0).getRGB();
+
+                        image.setRGB(y, x, color);
+                    }
+                }
+
+                observer.setSurface(new Canvas(image));
+            }
+
+            probability = (100d / (samplesCount)) * right;
+            System.err.println("PR = " + probability);
+        } while (probability < 96 && maxProbability < probability);
+
+        return true;
     }
 
     /**

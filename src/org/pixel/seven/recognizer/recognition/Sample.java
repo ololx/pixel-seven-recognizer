@@ -43,7 +43,7 @@ public class Sample {
         Objects.requireNonNull(sample, "The sample couldn't be null");
         this.sample = sample;
 
-        if (value > 0 || value > 9)
+        if (value < 0 || value > 9)
             throw new IllegalArgumentException("The expected value couldn't be less than 0 or more than 9");
         this.value = value;
     }

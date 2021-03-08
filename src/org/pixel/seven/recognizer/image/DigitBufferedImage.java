@@ -2,6 +2,7 @@ package org.pixel.seven.recognizer.image;
 
 import org.pixel.seven.recognizer.image.processing.ImageProcessing;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
@@ -51,8 +52,7 @@ public class DigitBufferedImage<I extends BufferedImage> implements ProcessedIma
      */
     @Override
     public int[] getPixels() {
-        int[] pixels = new int[this.image.getWidth() * this.image.getHeight()];
-        return this.image.getRGB(
+        int[] pixels = this.image.getRGB(
                 0,
                 0,
                 this.image.getWidth(),
@@ -61,6 +61,12 @@ public class DigitBufferedImage<I extends BufferedImage> implements ProcessedIma
                 0,
                 this.image.getWidth()
         );
+
+        for (int pixel = 0; pixel < pixels.length; pixel++) {
+            pixels[pixel] = pixels[pixel] == Color.BLACK.getRGB() ? 0 : 1;
+        }
+
+        return pixels;
     }
 
     /**
