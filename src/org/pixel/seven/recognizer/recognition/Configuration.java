@@ -1,50 +1,155 @@
 package org.pixel.seven.recognizer.recognition;
 
+import org.pixel.seven.recognizer.recognition.nn.Neuron;
+
+import java.util.Objects;
+
 /**
- * @project pixel-seven-recognizer
- * @created 05.03.2021 23:00
- * <p>
+ * The type Configuration.
+ *
  * @author Alexander A. Kropotin
+ * @project pixel -seven-recognizer
+ * @created 05.03.2021 23:00 <p>
  */
 public class Configuration {
 
-    private int sampleWidth = 28;
+    /**
+     * The default weight inc/dec step value
+     */
+    public static final double DEFAULT_TRAINING_SPEED = .01d;
 
-    private int sampleHeight = 28;
+    /**
+     * The default weight inc/dec step value
+     */
+    public static final Neuron.ActivationFunction DEFAULT_ACTIVATION_FUNCTION = Neuron.ActivationFunctions.SIGMOID.getActivationFunction();
 
+    /**
+     * The Sample width.
+     */
+    private int sampleWidth;
+
+    /**
+     * The Sample height.
+     */
+    private int sampleHeight;
+
+    /**
+     * The Activation.
+     */
+    private Neuron.ActivationFunction activation;
+
+    /**
+     * The Training speed.
+     */
+    private double trainingSpeed;
+
+    /**
+     * The Model path.
+     */
     private String modelPath;
 
+    /**
+     * Instantiates a new Configuration.
+     *
+     * @param sampleWidth  the sample width
+     * @param sampleHeight the sample height
+     */
     public Configuration(int sampleWidth, int sampleHeight) {
-        this(sampleWidth, sampleHeight, null);
+        this(sampleWidth, sampleHeight, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_TRAINING_SPEED, null);
     }
 
-    public Configuration(int sampleWidth, int sampleHeight, String digitModelPath) {
-        this.setSampleWidth(sampleWidth);
-        this.setSampleHeight(sampleHeight);
+    /**
+     * Instantiates a new Configuration.
+     *
+     * @param sampleWidth        the sample width
+     * @param sampleHeight       the sample height
+     * @param activationFunction the activation function
+     * @param trainingSpeed      the training speed
+     * @param digitModelPath     the digit model path
+     */
+    public Configuration(int sampleWidth,
+                         int sampleHeight,
+                         Neuron.ActivationFunction activationFunction,
+                         double trainingSpeed,
+                         String digitModelPath) {
+        Objects.requireNonNull(activationFunction, "The activation function couldn't be null");
+        this.activation = activationFunction;
+        this.trainingSpeed = trainingSpeed;
+        this.sampleWidth = sampleWidth;
+        this.sampleHeight = sampleHeight;
+
         this.setModelPath(digitModelPath);
     }
 
+    /**
+     * Gets sample width.
+     *
+     * @return the sample width
+     */
     public int getSampleWidth() {
         return this.sampleWidth;
     }
 
-    public void setSampleWidth(int width) {
-        this.sampleWidth = width;
-    }
-
+    /**
+     * Gets sample height.
+     *
+     * @return the sample height
+     */
     public int getSampleHeight() {
         return this.sampleHeight;
     }
 
-    public void setSampleHeight(int height) {
-        this.sampleHeight = height;
+    /**
+     * Gets training speed.
+     *
+     * @return the training speed
+     */
+    public double getTrainingSpeed() {
+        return this.trainingSpeed;
     }
 
+    /**
+     * Gets activation function.
+     *
+     * @return the activation function
+     */
+    public Neuron.ActivationFunction getActivationFunction() {
+        return this.activation;
+    }
+
+    /**
+     * Gets model path.
+     *
+     * @return the model path
+     */
     public String getModelPath() {
         return this.modelPath;
     }
 
+    /**
+     * Sets model path.
+     *
+     * @param modelPath the model path
+     */
     public void setModelPath(String modelPath) {
         this.modelPath = modelPath;
+    }
+
+    /**
+     * Is model path presents boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isModelPathPresents() {
+        return this.modelPath != null;
+    }
+
+    /**
+     * Gets input size.
+     *
+     * @return the input size
+     */
+    public int getInputSize() {
+        return this.sampleWidth * this.sampleHeight;
     }
 }

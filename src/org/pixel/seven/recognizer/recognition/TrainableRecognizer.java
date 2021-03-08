@@ -7,7 +7,7 @@ package org.pixel.seven.recognizer.recognition;
  * @project pixel -seven-recognizer
  * @created 08.03.2021 17:59 <p>
  */
-public interface Trainable {
+public interface TrainableRecognizer<S> {
 
     /**
      * Retrain boolean.
@@ -15,5 +15,5 @@ public interface Trainable {
      * @param samples the samples
      * @return the boolean
      */
-    boolean retrain(Sample... samples);
+    boolean retrain(S... samples);
 }

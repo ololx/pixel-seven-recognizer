@@ -16,16 +16,6 @@ public class SingleLayerPerceptron implements NNet, Neuron {
     }
 
     /**
-     * The default weight inc/dec step value
-     */
-    public static final double DEFAULT_EDUCATION_SPEED = .01d;
-
-    /**
-     * The default weight inc/dec step value
-     */
-    public static final ActivationFunction DEFAULT_ACTIVATION_FUNCTION = ActivationFunctions.SIGMOID.getActivationFunction();
-
-    /**
      * The array of S-Elements (sensors)
      */
     private int[] sensors;
@@ -55,25 +45,6 @@ public class SingleLayerPerceptron implements NNet, Neuron {
      * The weight inc/dec step value
      */
     private double speed;
-
-    /**
-     * Instantiates a new Single layer perceptron.
-     *
-     * @param size the size
-     */
-    public SingleLayerPerceptron(int size) {
-        this(size, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_EDUCATION_SPEED);
-    }
-
-    /**
-     * Instantiates a new Single layer perceptron.
-     *
-     * @param size       the size
-     * @param activation the activation
-     */
-    public SingleLayerPerceptron(int size, ActivationFunction activation) {
-        this(size, activation, DEFAULT_EDUCATION_SPEED);
-    }
 
     /**
      * Instantiates a new Single layer perceptron.
