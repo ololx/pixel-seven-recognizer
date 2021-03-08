@@ -12,7 +12,7 @@ public class Configuration {
 
     private int sampleHeight = 28;
 
-    private String digitModelPath;
+    private String modelPath;
 
     public Configuration(int sampleWidth, int sampleHeight) {
         this(sampleWidth, sampleHeight, null);
@@ -21,7 +21,7 @@ public class Configuration {
     public Configuration(int sampleWidth, int sampleHeight, String digitModelPath) {
         this.setSampleWidth(sampleWidth);
         this.setSampleHeight(sampleHeight);
-        this.setDigitModelPath(digitModelPath);
+        this.setModelPath(digitModelPath);
     }
 
     public int getSampleWidth() {
@@ -40,11 +40,11 @@ public class Configuration {
         this.sampleHeight = height;
     }
 
-    public String getDigitModelPath() {
-        return this.digitModelPath;
+    public String getModelPath() {
+        return this.modelPath;
     }
 
-    public void setDigitModelPath(String digitModelPath) {
-        this.digitModelPath = digitModelPath;
+    public void setModelPath(String modelPath) {
+        this.modelPath = modelPath;
     }
 }

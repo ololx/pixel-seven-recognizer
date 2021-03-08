@@ -20,7 +20,7 @@ public class Main {
     public static final int digit = 2;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, Neuron.ActivationFunctions.SIGMOID.getActivationFunction(), .001d);
+        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, Neuron.ActivationFunctions.SIGMOID.getActivationFunction(), .01d);
         File[] imagesFiles = new File("./input").listFiles();
         int samples = imagesFiles.length;
         DigitBufferedImage[] images = new DigitBufferedImage[samples];
@@ -96,7 +96,7 @@ public class Main {
 
             prob = (100d / (samples)) * right;
             System.err.println("PR = " + prob);
-            if (prob >= 99 || lastProb == prob) break;
+            if (prob >= 97 || lastProb == prob) break;
         }
 
         double[] weights = neuro.getWeights();
