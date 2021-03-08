@@ -1,9 +1,9 @@
-package org.pixel.seven.recognizer.drawing;
+package org.pixel.seven.recognizer;
 
 import org.pixel.seven.recognizer.image.DigitBufferedImage;
 import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
 import org.pixel.seven.recognizer.image.processing.DigitScaling;
-import org.pixel.seven.recognizer.recognition.SingleLayerPerceptron;
+import org.pixel.seven.recognizer.recognition.nn.SingleLayerPerceptron;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;

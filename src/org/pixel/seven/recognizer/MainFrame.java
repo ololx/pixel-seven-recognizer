@@ -1,13 +1,11 @@
 package org.pixel.seven.recognizer;
 
-import org.pixel.seven.recognizer.drawing.DrawingTablet;
+import org.pixel.seven.recognizer.drawing.DrawingPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * @project pixel-seven-recognizer
@@ -17,7 +15,7 @@ import java.awt.event.MouseEvent;
  */
 public class MainFrame extends JFrame {
 
-    public void init(DrawingTablet drawing) {
+    public void init(DrawingPanel drawing) {
         JToolBar toolbar = new  JToolBar("Toolbar", JToolBar.VERTICAL);
         toolbar.setBounds(0, 0, 25, 600);
 
@@ -25,7 +23,7 @@ public class MainFrame extends JFrame {
         pencil.setBounds(0, 0, 25, 100);
         pencil.addActionListener(new  ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                drawing.setActiveTool(DrawingTablet.TOOLS.get("pencil"));
+                drawing.setTool(DrawingPanel.TOOLS.get("pencil"));
             }
         });
         toolbar.add(pencil);
@@ -34,7 +32,7 @@ public class MainFrame extends JFrame {
         filling.setBounds(0, 0, 25, 100);
         filling.addActionListener(new  ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                drawing.setActiveTool(DrawingTablet.TOOLS.get("filling"));
+                drawing.setTool(DrawingPanel.TOOLS.get("filling"));
             }
         });
         toolbar.add(filling);
@@ -43,7 +41,7 @@ public class MainFrame extends JFrame {
         eraser.setBounds(0, 0, 25, 100);
         eraser.addActionListener(new  ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                drawing.setActiveTool(DrawingTablet.TOOLS.get("eraser"));
+                drawing.setTool(DrawingPanel.TOOLS.get("eraser"));
             }
         });
         toolbar.add(eraser);

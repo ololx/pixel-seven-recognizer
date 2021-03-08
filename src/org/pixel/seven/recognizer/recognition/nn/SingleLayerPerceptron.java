@@ -1,4 +1,4 @@
-package org.pixel.seven.recognizer.recognition;
+package org.pixel.seven.recognizer.recognition.nn;
 
 /**
  * The type Single layer perceptron.
@@ -7,7 +7,7 @@ package org.pixel.seven.recognizer.recognition;
  * @project pixel -seven-recognizer
  * @created 19.02.2021 21:20 <p>
  */
-public class SingleLayerPerceptron implements Neuron {
+public class SingleLayerPerceptron implements NNet, Neuron {
 
     /**
      * The type Binary adder.
@@ -96,8 +96,9 @@ public class SingleLayerPerceptron implements Neuron {
      * @param input the input
      * @return the double
      */
+    @Override
     public double proceed(int[] input) {
-        this.setSensors(input);
+        this.setInput(input);
         this.output = this.activation.calculate(this.adder.calculate(this.sensors, this.weights));
 
         return this.output;
@@ -106,6 +107,7 @@ public class SingleLayerPerceptron implements Neuron {
     /**
      * Decrease weights.
      */
+    @Override
     public void decreaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
             if (this.sensors[link] == 1) this.weights[link] -= this.speed;
@@ -115,6 +117,7 @@ public class SingleLayerPerceptron implements Neuron {
     /**
      * Increase weights.
      */
+    @Override
     public void increaseWeights() {
         for (int link = 0; link < this.sensors.length; link++) {
             if (this.sensors[link] == 1) this.weights[link] += this.speed;
@@ -126,6 +129,7 @@ public class SingleLayerPerceptron implements Neuron {
      *
      * @return the output
      */
+    @Override
     public double getOutput() {
         return this.output;
     }
@@ -135,6 +139,7 @@ public class SingleLayerPerceptron implements Neuron {
      *
      * @return the double [ ]
      */
+    @Override
     public double[] getWeights() {
         return this.weights;
     }
@@ -144,6 +149,7 @@ public class SingleLayerPerceptron implements Neuron {
      *
      * @param weights the weights
      */
+    @Override
     public void setWeights(double[] weights) {
         this.weights = weights;
     }
@@ -151,9 +157,9 @@ public class SingleLayerPerceptron implements Neuron {
     /**
      * Sets sensors.
      *
-     * @param sensors the sensors
+     * @param input the sensors
      */
-    public void setSensors(int[] sensors) {
-        this.sensors = sensors;
+    private void setInput(int[] input) {
+        this.sensors = input;
     }
 }

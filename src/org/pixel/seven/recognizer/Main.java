@@ -1,13 +1,12 @@
 package org.pixel.seven.recognizer;
 
-import org.pixel.seven.recognizer.drawing.DrawingFrame;
 import org.pixel.seven.recognizer.drawing.surface.Canvas;
-import org.pixel.seven.recognizer.drawing.DrawingTablet;
+import org.pixel.seven.recognizer.drawing.DrawingPanel;
 import org.pixel.seven.recognizer.image.DigitBufferedImage;
 import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
 import org.pixel.seven.recognizer.image.processing.DigitScaling;
-import org.pixel.seven.recognizer.recognition.Neuron;
-import org.pixel.seven.recognizer.recognition.SingleLayerPerceptron;
+import org.pixel.seven.recognizer.recognition.nn.Neuron;
+import org.pixel.seven.recognizer.recognition.nn.SingleLayerPerceptron;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,7 +20,7 @@ public class Main {
     public static final int digit = 2;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, Neuron.ActivationFunctions.SIGMOID.getActivationFunction(), .01d);
+        SingleLayerPerceptron neuro = new SingleLayerPerceptron(28 * 28, Neuron.ActivationFunctions.SIGMOID.getActivationFunction(), .001d);
         File[] imagesFiles = new File("./input").listFiles();
         int samples = imagesFiles.length;
         DigitBufferedImage[] images = new DigitBufferedImage[samples];
@@ -43,7 +42,7 @@ public class Main {
             }
         }
 
-        DrawingTablet drawing = new DrawingTablet(28, 28);
+        DrawingPanel drawing = new DrawingPanel(28, 28);
 
         SwingUtilities.invokeLater(new  Runnable() {
             public void run() {
@@ -51,9 +50,10 @@ public class Main {
             }
         });
 
-        double prob = 0;
+        double prob = 0, lastProb = prob;
         for (int i = 0; i < samples; i++) {
             int right = 0;
+            lastProb = prob;
 
             for (int j = 0; j < samples; j++) {
                 int option = digits[j];
@@ -90,13 +90,13 @@ public class Main {
                     }
                 }
 
-                drawing.setCanvas(new Canvas(image));
+                drawing.setSurface(new Canvas(image));
                 //Thread.sleep(1);
             }
 
             prob = (100d / (samples)) * right;
             System.err.println("PR = " + prob);
-            if (prob >= 97) break;
+            if (prob >= 99 || lastProb == prob) break;
         }
 
         double[] weights = neuro.getWeights();

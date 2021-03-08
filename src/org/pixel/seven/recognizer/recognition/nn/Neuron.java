@@ -1,4 +1,4 @@
-package org.pixel.seven.recognizer.recognition;
+package org.pixel.seven.recognizer.recognition.nn;
 
 /**
  * The interface Neuron.
@@ -47,7 +47,7 @@ public interface Neuron {
 
     enum ActivationFunctions {
 
-        SIGMOID(association ->  1 / (1 + Math.exp(-.25 * association))),
+        SIGMOID(association ->  1 / (1 + Math.exp(-0.5d * association))),
         HYPERBOLIC_TANGENT(association -> Math.tan(association / 1));
 
         private ActivationFunction activationFunction;
