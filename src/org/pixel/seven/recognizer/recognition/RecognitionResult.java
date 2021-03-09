@@ -11,7 +11,7 @@ import java.util.Objects;
  * <p>
  * @author Alexander A. Kropotin
  */
-public class Result {
+public class RecognitionResult {
 
     private double resultValue;
 
@@ -19,7 +19,7 @@ public class Result {
 
     private DigitBufferedImage processedSample;
 
-    public Result(BufferedImage originSample, DigitBufferedImage processedSample, double resultValue) {
+    public RecognitionResult(BufferedImage originSample, DigitBufferedImage processedSample, double resultValue) {
         Objects.requireNonNull(originSample, "The origin sample couldn't be null");
         Objects.requireNonNull(processedSample, "The processed sample couldn't be null");
 
@@ -38,5 +38,9 @@ public class Result {
 
     public DigitBufferedImage getProcessedSample() {
         return this.processedSample;
+    }
+
+    public boolean getResult() {
+        return this.resultValue == 1 ? true : false;
     }
 }

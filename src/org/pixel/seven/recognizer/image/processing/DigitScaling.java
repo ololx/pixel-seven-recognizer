@@ -107,9 +107,9 @@ public class DigitScaling<I extends BufferedImage> implements ImageProcessing<I>
     private I getSubImage(I image) {
         Coordinates subImageCoordinates = this.getImageCoordinates(image);
         if (subImageCoordinates.minX == 0
-                || subImageCoordinates.minY == 0
-                || subImageCoordinates.maxX == image.getWidth()
-                || subImageCoordinates.maxY == image.getHeight()) return image;
+                && subImageCoordinates.minY == 0
+                && subImageCoordinates.maxX == image.getWidth()
+                && subImageCoordinates.maxY == image.getHeight()) return image;
 
         BufferedImage subImage = image.getSubimage(
                 subImageCoordinates.minX,

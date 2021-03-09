@@ -1,5 +1,7 @@
 package org.pixel.seven.recognizer.recognition;
 
+import org.pixel.seven.recognizer.drawing.DrawingTablet;
+
 /**
  * The interface Recognizer.
  *
@@ -8,7 +10,7 @@ package org.pixel.seven.recognizer.recognition;
  * @project pixel -seven-recognizer
  * @created 05.03.2021 22:43 <p>
  */
-public interface Recognizer<I> {
+public interface Recognizer<I, S> {
 
     /**
      * Recognize.
@@ -16,5 +18,13 @@ public interface Recognizer<I> {
      * @param input the input
      * @return
      */
-    Result recognize(I input);
+    RecognitionResult recognize(I input);
+
+    /**
+     * Retrain boolean.
+     *
+     * @param samples the samples
+     * @return the boolean
+     */
+    boolean retrain(DrawingTablet observer, S... samples);
 }

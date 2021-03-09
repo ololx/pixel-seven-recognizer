@@ -43,6 +43,8 @@ public class Configuration {
      */
     private double trainingSpeed;
 
+    private int recognitionDigit;
+
     /**
      * The Model path.
      */
@@ -54,8 +56,8 @@ public class Configuration {
      * @param sampleWidth  the sample width
      * @param sampleHeight the sample height
      */
-    public Configuration(int sampleWidth, int sampleHeight) {
-        this(sampleWidth, sampleHeight, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_TRAINING_SPEED, null);
+    public Configuration(int sampleWidth, int sampleHeight, int recognitionDigit) {
+        this(sampleWidth, sampleHeight, recognitionDigit, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_TRAINING_SPEED, null);
     }
 
     /**
@@ -69,6 +71,7 @@ public class Configuration {
      */
     public Configuration(int sampleWidth,
                          int sampleHeight,
+                         int recognitionDigit,
                          Neuron.ActivationFunction activationFunction,
                          double trainingSpeed,
                          String digitModelPath) {
@@ -77,8 +80,13 @@ public class Configuration {
         this.trainingSpeed = trainingSpeed;
         this.sampleWidth = sampleWidth;
         this.sampleHeight = sampleHeight;
+        this.recognitionDigit = recognitionDigit;
 
         this.setModelPath(digitModelPath);
+    }
+
+    public int getRecognitionDigit() {
+        return this.recognitionDigit;
     }
 
     /**

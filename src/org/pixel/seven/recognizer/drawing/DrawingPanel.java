@@ -25,7 +25,7 @@ public class DrawingPanel extends JPanel implements DrawingTablet, MouseListener
 
     public static final Map<String, DrawingTool> TOOLS = new HashMap<String, DrawingTool>() {{
         put("pencil", new Pencil(3f, Color.WHITE.getRGB()));
-        put("eraser", new Eraser(10f));
+        put("eraser", new Eraser(100f));
         put("filling", new Filling(1f, Color.BLACK.getRGB()));
     }};
 
@@ -77,7 +77,7 @@ public class DrawingPanel extends JPanel implements DrawingTablet, MouseListener
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        this.paint();
+        this.applyTool();
     }
 
     /**
@@ -115,7 +115,7 @@ public class DrawingPanel extends JPanel implements DrawingTablet, MouseListener
     @Override
     public void mouseDragged(MouseEvent e) {
         this.setPosition(e.getX(), e.getY(), this.tool);
-        this.paint();
+        this.applyTool();
     }
 
     /**
@@ -128,17 +128,30 @@ public class DrawingPanel extends JPanel implements DrawingTablet, MouseListener
         this.setPosition(e.getX(), e.getY(), this.tool);
     }
 
-    private void paint() {
+    public void applyTool() {
         this.tool.apply(this.canvas);
         this.repaint();
     }
 
-    private DrawingTool setPosition(int mouseX, int mouseY, DrawingTool tool) {
+    public void applyTool(int mouseX, int mouseY, DrawingTool tool) {
+        this.setTool(tool);
+        this.setPosition(mouseX, mouseY);
+        this.tool.apply(this.canvas);
+        this.repaint();
+    }
+
+    public DrawingTool setPosition(int mouseX, int mouseY, DrawingTool tool) {
         int x = this.canvas.getXScaled(mouseX, this.getWidth());
         int y = this.canvas.getYScaled(mouseY, this.getHeight());
         tool.setPosition(DrawingTool.Position.of(x, y));
 
         return tool;
+    }
+
+    public void setPosition(int mouseX, int mouseY) {
+        int x = this.canvas.getXScaled(mouseX, this.getWidth());
+        int y = this.canvas.getYScaled(mouseY, this.getHeight());
+        this.tool.setPosition(DrawingTool.Position.of(x, y));
     }
 
     @Override

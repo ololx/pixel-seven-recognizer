@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * <p>
  * @author Alexander A. Kropotin
  */
-public class DigitBinaryClassifier implements Recognizer<BufferedImage>, TrainableRecognizer<Sample> {
+public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> {
 
     private Logger log;
 
@@ -65,11 +65,12 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage>, Trainab
 
                 this.network.proceed(inputPixels);
 
-                if (value != 2 && this.network.getOutput() == 1) {
+                if (value != this.cfg.getRecognitionDigit() && this.network.getOutput() == 1) {
                     this.network.decreaseWeights();
-                } else if (value == 2 && this.network.getOutput() != 1) {
+                } else if (value == this.cfg.getRecognitionDigit() && this.network.getOutput() != 1) {
                     this.network.increaseWeights();
-                } else if (value == 2 && this.network.getOutput() == 1 || value != 2 && this.network.getOutput() != 1) {
+                } else if (value == this.cfg.getRecognitionDigit() && this.network.getOutput() == 1
+                        || value != this.cfg.getRecognitionDigit() && this.network.getOutput() != 1) {
                     right++;
                 }
 
@@ -112,14 +113,14 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage>, Trainab
      * @return
      */
     @Override
-    public Result recognize(BufferedImage input) {
+    public RecognitionResult recognize(BufferedImage input) {
         DigitBufferedImage processedSample = new DigitBufferedImage(input).process(
                 new DigitAccentuation(),
                 new DigitScaling()
         );
         this.network.proceed(processedSample.getPixels());
 
-        return new Result(
+        return new RecognitionResult(
                 input,
                 processedSample,
                 this.network.getOutput()
