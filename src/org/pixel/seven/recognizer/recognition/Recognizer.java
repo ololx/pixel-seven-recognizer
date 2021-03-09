@@ -14,6 +14,7 @@ public interface Recognizer<I> {
      * Recognize.
      *
      * @param input the input
+     * @return
      */
-    void recognize(I input);
+    Result recognize(I input);
 }

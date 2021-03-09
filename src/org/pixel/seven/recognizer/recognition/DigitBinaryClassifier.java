@@ -1,21 +1,15 @@
 package org.pixel.seven.recognizer.recognition;
 
-import org.pixel.seven.recognizer.MainFrame;
-import org.pixel.seven.recognizer.drawing.DrawingPanel;
 import org.pixel.seven.recognizer.drawing.DrawingTablet;
 import org.pixel.seven.recognizer.drawing.surface.Canvas;
 import org.pixel.seven.recognizer.image.DigitBufferedImage;
 import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
 import org.pixel.seven.recognizer.image.processing.DigitScaling;
 import org.pixel.seven.recognizer.recognition.nn.NNet;
-import org.pixel.seven.recognizer.recognition.nn.Neuron;
 import org.pixel.seven.recognizer.recognition.nn.SingleLayerPerceptron;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -62,14 +56,14 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage>, Trainab
             maxProbability = probability;
             right = 0;
             for (Sample sample : samples) {
-                int[] input = new DigitBufferedImage(sample.getSample())
+                int[] inputPixels = new DigitBufferedImage(sample.getSample())
                         .process(
                                 new DigitAccentuation(),
                                 new DigitScaling()
                         ).getPixels();
                 int value = sample.getValue();
 
-                this.network.proceed(input);
+                this.network.proceed(inputPixels);
 
                 if (value != 2 && this.network.getOutput() == 1) {
                     this.network.decreaseWeights();
@@ -115,9 +109,20 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage>, Trainab
      * Recognize.
      *
      * @param input the input
+     * @return
      */
     @Override
-    public void recognize(BufferedImage input) {
-        return;
+    public Result recognize(BufferedImage input) {
+        DigitBufferedImage processedSample = new DigitBufferedImage(input).process(
+                new DigitAccentuation(),
+                new DigitScaling()
+        );
+        this.network.proceed(processedSample.getPixels());
+
+        return new Result(
+                input,
+                processedSample,
+                this.network.getOutput()
+        );
     }
 }

@@ -44,11 +44,11 @@ public class Main {
         DrawingPanel drawing = new DrawingPanel(28, 28);
         SwingUtilities.invokeLater(new  Runnable() {
             public void run() {
-                new  MainFrame().init(drawing);
                 new DrawingFrame(new SingleLayerPerceptron(
                         28 * 28,
                         Neuron.ActivationFunctions.SIGMOID.getActivationFunction(),
                         .01d), 28, 28).init();
+                new  MainFrame().init(drawing);
             }
         });
 

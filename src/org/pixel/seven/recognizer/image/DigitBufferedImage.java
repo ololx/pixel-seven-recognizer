@@ -42,6 +42,7 @@ public class DigitBufferedImage<I extends BufferedImage> implements ProcessedIma
         for (ImageProcessing preset : presets) {
             this.image = (I) preset.apply(this.image);
         }
+
         return this;
     }
 
