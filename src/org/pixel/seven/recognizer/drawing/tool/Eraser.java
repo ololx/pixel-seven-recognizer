@@ -25,7 +25,7 @@ public class Eraser extends AbstractDrawingTool {
     public void apply(DrawingSurface surface) {
         Graphics2D graphics = (Graphics2D) surface.getImage().getGraphics();
         graphics.setStroke(new BasicStroke(this.size));
-        graphics.setColor(new Color(surface.getBackground()));
+        graphics.setColor(surface.getBackground());
         graphics.drawLine(
                 this.position.getX(),
                 this.position.getY(),

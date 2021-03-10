@@ -1,47 +1,56 @@
 package org.pixel.seven.recognizer.drawing.surface;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Objects;
 
 /**
- * @project pixel-seven-recognizer
- * @created 26.02.2021 15:28
- * <p>
+ * The type Canvas.
+ *
  * @author Alexander A. Kropotin
+ * @project pixel -seven-recognizer
+ * @created 26.02.2021 15:28 <p>
  */
-public class Canvas implements DrawingSurface {
+public class Canvas extends AbstractDrawingSurface {
 
-    private BufferedImage image;
-
-    private int background;
-
-    public Canvas(int width, int height) {
-        this(width, height, BufferedImage.TYPE_INT_RGB, 0);
-    }
-    public Canvas(int width, int height, int backgroundColor) {
+    /**
+     * Instantiates a new Canvas.
+     *
+     * @param width           the width
+     * @param height          the height
+     * @param backgroundColor the background color
+     */
+    public Canvas(int width, int height, Color backgroundColor) {
         this(width, height, BufferedImage.TYPE_INT_RGB, backgroundColor);
     }
 
-    public Canvas(int width, int height, int imageType, int backgroundColor) {
-        this(new  BufferedImage(width, height, imageType), backgroundColor);
+    /**
+     * Instantiates a new Canvas.
+     *
+     * @param width           the width
+     * @param height          the height
+     * @param imageType       the image type
+     * @param backgroundColor the background color
+     */
+    public Canvas(int width, int height, int imageType, Color backgroundColor) {
+        super(new BufferedImage(width, height, imageType), backgroundColor);
     }
 
+    /**
+     * Instantiates a new Canvas.
+     *
+     * @param image           the image
+     * @param backgroundColor the background color
+     */
+    public Canvas(BufferedImage image, Color backgroundColor) {
+        super(image, backgroundColor);
+    }
+
+    /**
+     * Instantiates a new Canvas.
+     *
+     * @param image the image
+     */
     public Canvas(BufferedImage image) {
-        this(image, 0);
-    }
-    public Canvas(BufferedImage image, int backgroundColor) {
-        Objects.requireNonNull(image, "The image couldn't be null");
-        this.image = image;
-        this.background = backgroundColor;
-    }
-
-    @Override
-    public BufferedImage getImage() {
-        return this.image;
-    }
-
-    @Override
-    public int getBackground() {
-        return this.background;
+        super(image);
     }
 }
