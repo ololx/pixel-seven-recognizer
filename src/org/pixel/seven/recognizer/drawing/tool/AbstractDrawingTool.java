@@ -30,12 +30,30 @@ public abstract class AbstractDrawingTool implements DrawingTool {
     }
 
     /**
+     * Gets size.
+     *
+     */
+    @Override
+    public float getSize() {
+        return this.size;
+    }
+
+    /**
+     * Change step.
+     *
+     */
+    @Override
+    public void changeSizeOn(float value) {
+        this.setSize(this.getSize() + value);
+    }
+
+    /**
      * Sets size.
      *
      * @param size the size
      */
     @Override
     public void setSize(float size) {
-        this.size = size;
+        this.size = size > 0 ? size : this.size;
     }
 }

@@ -101,7 +101,7 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
 
             probability = (100d / (samplesCount)) * right;
             System.err.println("PR = " + probability);
-        } while (probability < 96 && maxProbability < probability);
+        } while (probability < 56 && maxProbability < probability);
 
         return true;
     }

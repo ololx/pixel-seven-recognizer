@@ -76,7 +76,6 @@ public class AbstractDrawingSurface implements DrawingSurface {
      */
     @Override
     public void changeBackground(Color backgroundColor) {
-        ((Graphics2D) this.image.getGraphics()).setBackground(backgroundColor);
         for (int pixelX = 0; pixelX < this.image.getWidth(); pixelX++) {
             for (int pixelY = 0; pixelY < this.image.getHeight(); pixelY++) {
                 if (this.image.getRGB(pixelX, pixelY) != this.background.getRGB()) continue;
@@ -93,7 +92,9 @@ public class AbstractDrawingSurface implements DrawingSurface {
      */
     @Override
     public void clear() {
-        this.image.getGraphics().clearRect(
+        Graphics2D graphics = (Graphics2D) this.image.getGraphics();
+        graphics.setColor(this.background);
+        graphics.fillRect(
                 0,
                 0,
                 this.image.getWidth(),

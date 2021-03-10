@@ -100,11 +100,24 @@ public interface DrawingTool {
     void setPosition(Position position);
 
     /**
+     * Gets size.
+     *
+     */
+    float getSize();
+
+    /**
      * Sets size.
      *
      * @param size the size
      */
     void setSize(float size);
+
+    /**
+     * Change value.
+     *
+     * @param value the value
+     */
+    void changeSizeOn(float value);
 
     /**
      * Apply.

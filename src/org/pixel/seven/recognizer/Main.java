@@ -15,6 +15,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -42,20 +44,20 @@ public class Main {
         DrawingPanel drawing = new DrawingPanel(28, 28);
         drawing.addMouseListener(new  MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == 1) drawing.applyTool(e.getX(), e.getY(), DrawingPanel.TOOLS.get("pencil"));
-                else if (e.getButton() == 3) drawing.applyTool(e.getX(), e.getY(), DrawingPanel.TOOLS.get("eraser"));
+                if (e.getButton() == 1) drawing.applyTool();
+                else if (e.getButton() == 3) {
+                    drawing.getSurface().changeBackground(Color.BLACK);
+                    drawing.getSurface().clear();
+                    drawing.repaint();
+                }
             }
 
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == 3) return;
 
                 RecognitionResult result = neuro.recognize(drawing.getSurface().getImage());
-
-                ColoringTool tool = (ColoringTool) DrawingPanel.TOOLS.get("filling");
-                if (result.getResult()) tool.setColor(Color.GREEN.getRGB());
-                else tool.setColor(Color.RED.getRGB());
-
-                drawing.applyTool(0, 0, (DrawingTool) tool);
+                drawing.getSurface().changeBackground(result.getResult() ? Color.GREEN : Color.RED);
+                drawing.repaint();
             }
         });
 
@@ -67,6 +69,14 @@ public class Main {
 
             public void mouseMoved(MouseEvent e) {
                 drawing.setPosition(e.getX(), e.getY());
+            }
+        });
+
+        drawing.addMouseWheelListener(new MouseAdapter() {
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                DrawingPanel.TOOLS.get("pencil").setSize(DrawingPanel.TOOLS.get("pencil").getSize() + e.getWheelRotation());
+                drawing.setCursor();
+                System.out.println(DrawingPanel.TOOLS.get("pencil").getSize());
             }
         });
 
