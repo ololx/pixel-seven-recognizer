@@ -76,7 +76,7 @@ public class Main {
 
         SwingUtilities.invokeLater(new  Runnable() {
             public void run() {
-                new  MainFrame().init(drawing);
+                new  MainFrame(drawing).init();
             }
         });
 

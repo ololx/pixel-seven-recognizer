@@ -17,30 +17,29 @@ import java.util.Map;
  */
 public class MainFrame extends JFrame {
 
-    private final DrawingTablet drawingTablet;
+    private final JPanel drawingTablet;
 
     private Recognizer recognizer;
 
-    public MainFrame(DrawingTablet drawingTablet) {
+    public MainFrame(JPanel drawingTablet) {
         this.drawingTablet = drawingTablet;
+        this.drawingTablet.setBounds(0,0,1024,1024);
+        this.drawingTablet.setBackground(Color.BLACK);
+        this.drawingTablet.setOpaque(true);
+        add(this.drawingTablet);
     }
 
-    public void init(DrawingPanel drawing) {
-        drawing.setBounds(0,0,1024,1024);
-        drawing.setBackground(Color.BLACK);
-        drawing.setOpaque(true);
-
-        setSize(drawing.getWidth(), drawing.getHeight());
+    public void init() {
+        setSize(this.drawingTablet.getWidth(), this.drawingTablet.getHeight());
         setResizable(true);
         setTitle("Recognizer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setVisible(true);
-        add(drawing);
 
         addComponentListener(new  ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
-                drawing.setSize(getWidth(), getHeight());
+                drawingTablet.setSize(getWidth(), getHeight());
             }
         });
     }
