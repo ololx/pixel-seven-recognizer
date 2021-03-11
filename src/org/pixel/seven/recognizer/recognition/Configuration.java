@@ -43,6 +43,9 @@ public class Configuration {
      */
     private double trainingSpeed;
 
+    /**
+     * The Recognition digit.
+     */
     private int recognitionDigit;
 
     /**
@@ -53,8 +56,9 @@ public class Configuration {
     /**
      * Instantiates a new Configuration.
      *
-     * @param sampleWidth  the sample width
-     * @param sampleHeight the sample height
+     * @param sampleWidth      the sample width
+     * @param sampleHeight     the sample height
+     * @param recognitionDigit the recognition digit
      */
     public Configuration(int sampleWidth, int sampleHeight, int recognitionDigit) {
         this(sampleWidth, sampleHeight, recognitionDigit, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_TRAINING_SPEED, null);
@@ -65,6 +69,7 @@ public class Configuration {
      *
      * @param sampleWidth        the sample width
      * @param sampleHeight       the sample height
+     * @param recognitionDigit   the recognition digit
      * @param activationFunction the activation function
      * @param trainingSpeed      the training speed
      * @param digitModelPath     the digit model path
@@ -85,6 +90,11 @@ public class Configuration {
         this.setModelPath(digitModelPath);
     }
 
+    /**
+     * Gets recognition digit.
+     *
+     * @return the recognition digit
+     */
     public int getRecognitionDigit() {
         return this.recognitionDigit;
     }

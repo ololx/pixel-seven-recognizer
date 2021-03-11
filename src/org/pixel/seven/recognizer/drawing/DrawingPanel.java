@@ -9,9 +9,6 @@ import org.pixel.seven.recognizer.drawing.tool.Pencil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +39,7 @@ public class DrawingPanel extends JPanel implements DrawingTablet {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(this.canvas.getImage(), 0, 0, this.getWidth(), this.getHeight(),null);
-        this.setCursor();
+        this.setupCursor();
     }
 
     public void applyTool() {
@@ -92,19 +89,22 @@ public class DrawingPanel extends JPanel implements DrawingTablet {
         this.tool = tool;
     }
 
-    public void setCursor() {
-        BufferedImage icon = this.getCursorIcon();
+    public void setupCursor() {
+        Dimension bestCursorSize = Toolkit.getDefaultToolkit().getBestCursorSize(
+                (int) (this.getTool().getSize() / this.canvas.getXScaling(this.getWidth())),
+                (int) (this.getTool().getSize() / this.canvas.getYScaling(this.getHeight()))
+        );
         setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
-                icon,
-                new Point(0, 0),
+                this.getCursorIcon(bestCursorSize),
+                new Point((bestCursorSize.width - 1) / 2, (bestCursorSize.height - 1) / 2),
                 "tool")
         );
     }
 
-    private BufferedImage getCursorIcon() {
+    private BufferedImage getCursorIcon(Dimension bestCursorSize) {
         BufferedImage icon = new BufferedImage(
-                (int) (this.getTool().getSize() / this.canvas.getXScaling(this.getWidth())),
-                (int) (this.getTool().getSize() / this.canvas.getYScaling(this.getHeight())),
+                bestCursorSize.width,
+                bestCursorSize.height,
                 BufferedImage.TYPE_INT_ARGB
         );
         Graphics2D graphics = (Graphics2D) icon.getGraphics();

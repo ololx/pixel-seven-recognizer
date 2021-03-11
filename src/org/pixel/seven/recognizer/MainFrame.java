@@ -1,15 +1,13 @@
 package org.pixel.seven.recognizer;
 
 import org.pixel.seven.recognizer.drawing.DrawingPanel;
+import org.pixel.seven.recognizer.drawing.DrawingTablet;
+import org.pixel.seven.recognizer.recognition.Recognizer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.Map;
 
 /**
  * @project pixel-seven-recognizer
@@ -18,6 +16,14 @@ import java.io.IOException;
  * @author Alexander A. Kropotin
  */
 public class MainFrame extends JFrame {
+
+    private final DrawingTablet drawingTablet;
+
+    private Recognizer recognizer;
+
+    public MainFrame(DrawingTablet drawingTablet) {
+        this.drawingTablet = drawingTablet;
+    }
 
     public void init(DrawingPanel drawing) {
         drawing.setBounds(0,0,1024,1024);

@@ -1,14 +1,10 @@
 package org.pixel.seven.recognizer;
 
 import org.pixel.seven.recognizer.drawing.DrawingPanel;
-import org.pixel.seven.recognizer.drawing.tool.ColoringTool;
-import org.pixel.seven.recognizer.drawing.tool.DrawingTool;
 import org.pixel.seven.recognizer.recognition.Configuration;
 import org.pixel.seven.recognizer.recognition.DigitBinaryClassifier;
 import org.pixel.seven.recognizer.recognition.RecognitionResult;
 import org.pixel.seven.recognizer.recognition.Sample;
-import org.pixel.seven.recognizer.recognition.nn.Neuron;
-import org.pixel.seven.recognizer.recognition.nn.SingleLayerPerceptron;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,7 +12,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -75,8 +70,7 @@ public class Main {
         drawing.addMouseWheelListener(new MouseAdapter() {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 DrawingPanel.TOOLS.get("pencil").setSize(DrawingPanel.TOOLS.get("pencil").getSize() + e.getWheelRotation());
-                drawing.setCursor();
-                System.out.println(DrawingPanel.TOOLS.get("pencil").getSize());
+                drawing.setupCursor();
             }
         });
 
