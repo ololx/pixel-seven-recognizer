@@ -1,6 +1,9 @@
 package org.pixel.seven.recognizer.recognition;
 
 import org.pixel.seven.recognizer.drawing.DrawingTablet;
+import org.pixel.seven.recognizer.recognition.nn.NNet;
+
+import java.util.function.Consumer;
 
 /**
  * The interface Recognizer.
@@ -26,5 +29,5 @@ public interface Recognizer<I, S> {
      * @param samples the samples
      * @return the boolean
      */
-    boolean retrain(DrawingTablet observer, S... samples);
+    boolean retrain(Consumer<NNet> consumer, S... samples);
 }

@@ -11,6 +11,7 @@ import org.pixel.seven.recognizer.recognition.nn.SingleLayerPerceptron;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 /**
@@ -49,7 +50,7 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
      * @return the boolean
      */
     @Override
-    public boolean retrain(DrawingTablet observer, Sample... samples) {
+    public boolean retrain(Consumer<NNet> consumer, Sample... samples) {
         int samplesCount = samples.length;
         double probability = 0, maxProbability = 0, right = 0;
         do {
@@ -62,9 +63,9 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
                                 new DigitScaling()
                         ).getPixels();
                 int value = sample.getValue();
+                this.network.setInput(inputPixels);
 
-                this.network.proceed(inputPixels);
-
+                this.network.proceed();
                 if (value != this.cfg.getRecognitionDigit() && this.network.getOutput() == 1) {
                     this.network.decreaseWeights();
                 } else if (value == this.cfg.getRecognitionDigit() && this.network.getOutput() != 1) {
@@ -74,34 +75,12 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
                     right++;
                 }
 
-                double[] weights = this.network.getWeights();
-                double minW = weights[0], maxW = weights[0];
-                for (int ii = 0; ii < weights.length; ii++) {
-                    if (weights[ii] < minW) minW = weights[ii];
-                    if (weights[ii] > maxW) maxW = weights[ii];
-                }
-
-                System.err.println("min = " + minW + ";   max = " + maxW);
-
-                //FIXME:: Заменить на обсервера потом
-                int color = Color.BLACK.getRGB();
-                BufferedImage image = new BufferedImage(28, 28, BufferedImage.TYPE_INT_RGB);
-                for (int x = 0; x < 28; x++) {
-                    for (int y = 0; y < 28; y++) {
-                        if (weights[y + x * 28] == 0) color = Color.BLACK.getRGB();
-                        else if (weights[y + x * 28] < 0) color = new Color((int) ((255 / (minW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0, 0).getRGB();
-                        else if (weights[y + x * 28] > 0) color = new Color(0, (int) ((255 / (maxW * 1000)) * (int) (weights[y + x * 28] * 1000)), 0).getRGB();
-
-                        image.setRGB(y, x, color);
-                    }
-                }
-
-                observer.setSurface(new Canvas(image));
+                consumer.accept(this.network);
             }
 
-            probability = (100d / (samplesCount)) * right;
-            System.err.println("PR = " + probability);
-        } while (probability < 56 && maxProbability < probability);
+            probability = (100d / samplesCount) * right;
+            log.info("PR = " + probability);
+        } while (probability < 96 && maxProbability < probability);
 
         return true;
     }
@@ -118,7 +97,8 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
                 new DigitAccentuation(),
                 new DigitScaling()
         );
-        this.network.proceed(processedSample.getPixels());
+        this.network.setInput(processedSample.getPixels());
+        this.network.proceed();
 
         return new RecognitionResult(
                 input,

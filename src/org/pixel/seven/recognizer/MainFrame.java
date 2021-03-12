@@ -19,13 +19,17 @@ public class MainFrame extends JFrame {
 
     private final JPanel drawingTablet;
 
-    private Recognizer recognizer;
-
     public MainFrame(JPanel drawingTablet) {
         this.drawingTablet = drawingTablet;
         this.drawingTablet.setBounds(0,0,1024,1024);
         this.drawingTablet.setBackground(Color.BLACK);
         this.drawingTablet.setOpaque(true);
+        addComponentListener(new  ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                drawingTablet.setSize(getWidth(), getHeight());
+            }
+        });
+
         add(this.drawingTablet);
     }
 
@@ -36,11 +40,5 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setVisible(true);
-
-        addComponentListener(new  ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                drawingTablet.setSize(getWidth(), getHeight());
-            }
-        });
     }
 }

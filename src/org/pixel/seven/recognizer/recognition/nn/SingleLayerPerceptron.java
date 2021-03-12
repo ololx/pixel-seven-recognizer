@@ -1,5 +1,8 @@
 package org.pixel.seven.recognizer.recognition.nn;
 
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 /**
  * The type Single layer perceptron.
  *
@@ -7,42 +10,22 @@ package org.pixel.seven.recognizer.recognition.nn;
  * @project pixel -seven-recognizer
  * @created 19.02.2021 21:20 <p>
  */
-public class SingleLayerPerceptron implements NNet, Neuron {
+public class SingleLayerPerceptron implements NNet {
 
     /**
-     * The type Binary adder.
+     * The array of S-Elements (Sensors)
      */
-    private class BinaryAdder implements Adder {
-    }
+    private double[] sElements;
 
-    /**
-     * The array of S-Elements (sensors)
-     */
-    private int[] sensors;
-
-    /**
-     * The weights of sensors
-     * (links between s-elements and a-element)
-     */
-    private double[] weights;
-
-    /**
-     * The one A-Elements (associative)
-     */
-    private Adder adder;
-
-    /**
-     * The activation threshold
-     */
-    private ActivationFunction activation;
+    private double output;
 
     /**
      * The one R-Element (reactive)
      */
-    private double output;
+    private ArtificialNeuron rElement;
 
     /**
-     * The weight inc/dec step value
+     * The training speed - weight inc/dec step value
      */
     private double speed;
 
@@ -53,26 +36,54 @@ public class SingleLayerPerceptron implements NNet, Neuron {
      * @param activation the activation
      * @param speed      the speed
      */
-    public SingleLayerPerceptron(int size, ActivationFunction activation, double speed) {
-        this.adder = new BinaryAdder();
-        this.sensors = new int[size];
-        this.weights = new double[size];
-        this.activation = activation;
+    public SingleLayerPerceptron(int size, Neuron.ActivationFunction activation, double speed) {
+        this.sElements = new double[size];
+        this.rElement = new ArtificialNeuron(size, activation);
         this.speed = speed;
     }
 
     /**
      * Proceed double.
      *
-     * @param input the input
      * @return the double
      */
     @Override
-    public double proceed(int[] input) {
-        this.setInput(input);
-        this.output = this.activation.calculate(this.adder.calculate(this.sensors, this.weights));
+    public double proceed() {
+        this.output = this.rElement.proceed(this.sElements);
+        return output;
+    }
 
+    @Override
+    public void setInput(int[] input) {
+        for (int index = 0; index < input.length; index++) {
+            if (input[index] >= 1) this.sElements[index] = 1;
+            else this.sElements[index] = 0;
+        }
+    }
+
+
+    @Override
+    public boolean training(int[]  input,
+                            Predicate<Double> condition,
+                            Consumer<NNet> consumer) {
+        this.setInput(input);
+        double actual = this.proceed();
+        while (condition.test(actual)) {
+            consumer.accept(this);
+            actual = this.proceed();
+        }
+
+        return true;
+    }
+
+    @Override
+    public double getOutput() {
         return this.output;
+    }
+
+    @Override
+    public double[] getWeights() {
+        return this.rElement.getWeights();
     }
 
     /**
@@ -80,8 +91,8 @@ public class SingleLayerPerceptron implements NNet, Neuron {
      */
     @Override
     public void decreaseWeights() {
-        for (int link = 0; link < this.sensors.length; link++) {
-            if (this.sensors[link] == 1) this.weights[link] -= this.speed;
+        for (int link = 0; link < this.sElements.length; link++) {
+            if (this.sElements[link] == 1) this.rElement.decreaseWeight(link, this.speed);
         }
     }
 
@@ -90,47 +101,8 @@ public class SingleLayerPerceptron implements NNet, Neuron {
      */
     @Override
     public void increaseWeights() {
-        for (int link = 0; link < this.sensors.length; link++) {
-            if (this.sensors[link] == 1) this.weights[link] += this.speed;
+        for (int link = 0; link < this.sElements.length; link++) {
+            if (this.sElements[link] == 1) this.rElement.increaseWeight(link, this.speed);
         }
-    }
-
-    /**
-     * Gets output.
-     *
-     * @return the output
-     */
-    @Override
-    public double getOutput() {
-        return this.output;
-    }
-
-    /**
-     * Get weights double [ ].
-     *
-     * @return the double [ ]
-     */
-    @Override
-    public double[] getWeights() {
-        return this.weights;
-    }
-
-    /**
-     * Sets weights.
-     *
-     * @param weights the weights
-     */
-    @Override
-    public void setWeights(double[] weights) {
-        this.weights = weights;
-    }
-
-    /**
-     * Sets sensors.
-     *
-     * @param input the sensors
-     */
-    private void setInput(int[] input) {
-        this.sensors = input;
     }
 }

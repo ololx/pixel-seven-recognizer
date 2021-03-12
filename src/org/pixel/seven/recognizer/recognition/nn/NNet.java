@@ -1,5 +1,8 @@
 package org.pixel.seven.recognizer.recognition.nn;
 
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 /**
  * The interface N net.
  *
@@ -9,42 +12,19 @@ package org.pixel.seven.recognizer.recognition.nn;
  */
 public interface NNet {
 
-    /**
-     * Proceed double.
-     *
-     * @param input the input
-     * @return the double
-     */
-    double proceed(int[] input);
+    double proceed();
 
-    /**
-     * Get weights double [ ].
-     *
-     * @return the double [ ]
-     */
-    double[] getWeights() ;
+    void setInput(int[] input);
 
-    /**
-     * Sets weights.
-     *
-     * @param weights the weights
-     */
-    void setWeights(double[] weights);
+    double getOutput();
 
-    /**
-     * Decrease weights.
-     */
+    double[] getWeights();
+
+    boolean training(int[]  input,
+                     Predicate<Double> condition,
+                     Consumer<NNet> consumer);
+
     void decreaseWeights();
 
-    /**
-     * Increase weights.
-     */
     void increaseWeights();
-
-    /**
-     * Gets output.
-     *
-     * @return the output
-     */
-    double getOutput();
 }

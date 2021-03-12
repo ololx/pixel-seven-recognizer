@@ -21,7 +21,7 @@ public interface Neuron {
          * @param weights the weights
          * @return the double
          */
-        default double calculate(int[] inputs, double[] weights) {
+        static double calculate(double[] inputs, double[] weights) {
             double amount = 0;
             for (int link = 0; link < inputs.length; link++) {
                 amount += inputs[link] * weights[link];
@@ -60,4 +60,14 @@ public interface Neuron {
             return this.activationFunction;
         }
     }
+
+    double proceed(double[] input);
+
+    double[] getWeights() ;
+
+    void setWeights(double[] weights);
+
+    void increaseWeight(int index, double value);
+
+    void decreaseWeight(int index, double value);
 }
