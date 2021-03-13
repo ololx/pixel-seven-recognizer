@@ -29,5 +29,5 @@ public interface Recognizer<I, S> {
      * @param samples the samples
      * @return the boolean
      */
-    boolean retrain(Consumer<NNet> consumer, S... samples);
+    boolean retrain(TrainingSet<S> trainingSet, Consumer<NNet> consumer);
 }

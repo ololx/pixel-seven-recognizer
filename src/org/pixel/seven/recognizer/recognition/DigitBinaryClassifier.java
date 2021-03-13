@@ -46,17 +46,15 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
     /**
      * Retrain boolean.
      *
-     * @param samples the samples
      * @return the boolean
      */
     @Override
-    public boolean retrain(Consumer<NNet> consumer, Sample... samples) {
-        int samplesCount = samples.length;
+    public boolean retrain(TrainingSet<Sample> trainingSet, Consumer<NNet> consumer) {
         double probability = 0, maxProbability = 0, right = 0;
         do {
             maxProbability = probability;
             right = 0;
-            for (Sample sample : samples) {
+            for (Sample sample : trainingSet.getSamples()) {
                 int[] inputPixels = new DigitBufferedImage(sample.getSample())
                         .process(
                                 new DigitAccentuation(),
@@ -78,7 +76,7 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
                 consumer.accept(this.network);
             }
 
-            probability = (100d / samplesCount) * right;
+            probability = (100d / trainingSet.getSamplesCount()) * right;
             log.info("PR = " + probability);
         } while (probability < 96 && maxProbability < probability);
 

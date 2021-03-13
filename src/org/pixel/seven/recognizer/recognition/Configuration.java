@@ -16,7 +16,7 @@ public class Configuration {
     /**
      * The default weight inc/dec step value
      */
-    public static final double DEFAULT_TRAINING_SPEED = .01d;
+    public static final double DEFAULT_TRAINING_SPEED = .001d;
 
     /**
      * The default weight inc/dec step value
@@ -49,11 +49,6 @@ public class Configuration {
     private int recognitionDigit;
 
     /**
-     * The Model path.
-     */
-    private String modelPath;
-
-    /**
      * Instantiates a new Configuration.
      *
      * @param sampleWidth      the sample width
@@ -61,7 +56,7 @@ public class Configuration {
      * @param recognitionDigit the recognition digit
      */
     public Configuration(int sampleWidth, int sampleHeight, int recognitionDigit) {
-        this(sampleWidth, sampleHeight, recognitionDigit, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_TRAINING_SPEED, null);
+        this(sampleWidth, sampleHeight, recognitionDigit, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_TRAINING_SPEED);
     }
 
     /**
@@ -72,22 +67,18 @@ public class Configuration {
      * @param recognitionDigit   the recognition digit
      * @param activationFunction the activation function
      * @param trainingSpeed      the training speed
-     * @param digitModelPath     the digit model path
      */
     public Configuration(int sampleWidth,
                          int sampleHeight,
                          int recognitionDigit,
                          Neuron.ActivationFunction activationFunction,
-                         double trainingSpeed,
-                         String digitModelPath) {
+                         double trainingSpeed) {
         Objects.requireNonNull(activationFunction, "The activation function couldn't be null");
         this.activation = activationFunction;
         this.trainingSpeed = trainingSpeed;
         this.sampleWidth = sampleWidth;
         this.sampleHeight = sampleHeight;
         this.recognitionDigit = recognitionDigit;
-
-        this.setModelPath(digitModelPath);
     }
 
     /**
@@ -133,33 +124,6 @@ public class Configuration {
      */
     public Neuron.ActivationFunction getActivationFunction() {
         return this.activation;
-    }
-
-    /**
-     * Gets model path.
-     *
-     * @return the model path
-     */
-    public String getModelPath() {
-        return this.modelPath;
-    }
-
-    /**
-     * Sets model path.
-     *
-     * @param modelPath the model path
-     */
-    public void setModelPath(String modelPath) {
-        this.modelPath = modelPath;
-    }
-
-    /**
-     * Is model path presents boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isModelPathPresents() {
-        return this.modelPath != null;
     }
 
     /**
