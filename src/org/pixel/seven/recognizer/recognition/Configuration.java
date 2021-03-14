@@ -16,7 +16,7 @@ public class Configuration {
     /**
      * The default weight inc/dec step value
      */
-    public static final double DEFAULT_TRAINING_SPEED = .001d;
+    public static final double DEFAULT_TRAINING_SPEED = .01d;
 
     /**
      * The default weight inc/dec step value

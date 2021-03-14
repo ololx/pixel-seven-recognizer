@@ -20,10 +20,6 @@ public interface NNet {
 
     double[] getWeights();
 
-    boolean training(int[]  input,
-                     Predicate<Double> condition,
-                     Consumer<NNet> consumer);
-
     void decreaseWeights();
 
     void increaseWeights();

@@ -50,6 +50,7 @@ public class SingleLayerPerceptron implements NNet {
     @Override
     public double proceed() {
         this.output = this.rElement.proceed(this.sElements);
+
         return output;
     }
 
@@ -59,21 +60,6 @@ public class SingleLayerPerceptron implements NNet {
             if (input[index] >= 1) this.sElements[index] = 1;
             else this.sElements[index] = 0;
         }
-    }
-
-
-    @Override
-    public boolean training(int[]  input,
-                            Predicate<Double> condition,
-                            Consumer<NNet> consumer) {
-        this.setInput(input);
-        double actual = this.proceed();
-        while (condition.test(actual)) {
-            consumer.accept(this);
-            actual = this.proceed();
-        }
-
-        return true;
     }
 
     @Override

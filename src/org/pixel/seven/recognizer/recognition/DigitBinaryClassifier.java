@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -49,12 +50,14 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
      * @return the boolean
      */
     @Override
-    public boolean retrain(TrainingSet<Sample> trainingSet, Consumer<NNet> consumer) {
+    public boolean retrain(TrainingSet<Sample> trainingSet, Consumer<NNetModelSnapshot> consumer) {
         double probability = 0, maxProbability = 0, right = 0;
         do {
             maxProbability = probability;
             right = 0;
+            int iteration = 0;
             for (Sample sample : trainingSet.getSamples()) {
+                iteration++;
                 int[] inputPixels = new DigitBufferedImage(sample.getSample())
                         .process(
                                 new DigitAccentuation(),
@@ -73,12 +76,12 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
                     right++;
                 }
 
-                consumer.accept(this.network);
+                consumer.accept(NNetModelSnapshot.of(this.network.getWeights(), (100d / iteration) * right));
             }
 
             probability = (100d / trainingSet.getSamplesCount()) * right;
             log.info("PR = " + probability);
-        } while (probability < 96 && maxProbability < probability);
+        } while (probability < 96 && maxProbability <= probability);
 
         return true;
     }
