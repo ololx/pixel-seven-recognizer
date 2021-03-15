@@ -1,38 +1,49 @@
 package org.pixel.seven.recognizer.recognition;
 
-import org.pixel.seven.recognizer.drawing.DrawingTablet;
-import org.pixel.seven.recognizer.drawing.surface.Canvas;
 import org.pixel.seven.recognizer.image.DigitBufferedImage;
 import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
 import org.pixel.seven.recognizer.image.processing.DigitScaling;
 import org.pixel.seven.recognizer.recognition.nn.NNet;
 import org.pixel.seven.recognizer.recognition.nn.SingleLayerPerceptron;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @project pixel-seven-recognizer
- * @created 05.03.2021 20:24
- * <p>
+ * The type Digit binary classifier.
+ *
  * @author Alexander A. Kropotin
+ * @project pixel -seven-recognizer
+ * @created 05.03.2021 20:24 <p>
  */
 public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> {
 
+    /**
+     * The Log.
+     */
     private Logger log;
 
+    /**
+     * The Network.
+     */
     private NNet network;
 
+    /**
+     * The Cfg.
+     */
     private Configuration cfg;
 
     {
         this.log = Logger.getLogger(this.getClass().getName());
     }
 
+    /**
+     * Instantiates a new Digit binary classifier.
+     *
+     * @param cfg the cfg
+     */
     public DigitBinaryClassifier(Configuration cfg) {
         Objects.requireNonNull(cfg, "The configuration couldn't be null");
         this.cfg = cfg;
@@ -47,6 +58,8 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
     /**
      * Retrain boolean.
      *
+     * @param trainingSet the training set
+     * @param consumer    the consumer
      * @return the boolean
      */
     @Override
@@ -90,7 +103,7 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
      * Recognize.
      *
      * @param input the input
-     * @return
+     * @return recognition result
      */
     @Override
     public RecognitionResult recognize(BufferedImage input) {

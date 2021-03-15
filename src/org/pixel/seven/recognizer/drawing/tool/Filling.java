@@ -6,10 +6,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * @project pixel-seven-recognizer
- * @created 01.03.2021 09:46
- * <p>
+ * The type Filling.
+ *
  * @author Alexander A. Kropotin
+ * @project pixel -seven-recognizer
+ * @created 01.03.2021 09:46 <p>
  */
 public class Filling extends AbstractColoringTool {
 
@@ -56,6 +57,19 @@ public class Filling extends AbstractColoringTool {
         );
     }
 
+    /**
+     * Fill.
+     *
+     * @param graphics the graphics
+     * @param x        the x
+     * @param minX     the min x
+     * @param maxX     the max x
+     * @param y        the y
+     * @param minY     the min y
+     * @param maxY     the max y
+     * @param image    the image
+     * @param bclr     the bclr
+     */
     private void fill(Graphics2D graphics, int x, int minX, int maxX, int y, int minY, int maxY, BufferedImage image, int bclr) {
         if (x < minX || x > maxX || y < minY || y > maxY) return;
         else if (image.getRGB(x, y) == graphics.getColor().getRGB()) return;

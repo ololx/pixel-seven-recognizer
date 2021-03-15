@@ -1,8 +1,5 @@
 package org.pixel.seven.recognizer.recognition.nn;
 
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
 /**
  * The type Single layer perceptron.
  *
@@ -17,6 +14,9 @@ public class SingleLayerPerceptron implements NNet {
      */
     private double[] sElements;
 
+    /**
+     * The Output.
+     */
     private double output;
 
     /**
@@ -54,6 +54,11 @@ public class SingleLayerPerceptron implements NNet {
         return output;
     }
 
+    /**
+     * Sets input.
+     *
+     * @param input the input
+     */
     @Override
     public void setInput(int[] input) {
         for (int index = 0; index < input.length; index++) {
@@ -62,11 +67,21 @@ public class SingleLayerPerceptron implements NNet {
         }
     }
 
+    /**
+     * Gets output.
+     *
+     * @return the output
+     */
     @Override
     public double getOutput() {
         return this.output;
     }
 
+    /**
+     * Get weights double [ ].
+     *
+     * @return the double [ ]
+     */
     @Override
     public double[] getWeights() {
         return this.rElement.getWeights();

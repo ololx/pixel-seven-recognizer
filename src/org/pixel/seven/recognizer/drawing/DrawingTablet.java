@@ -13,6 +13,19 @@ import org.pixel.seven.recognizer.drawing.tool.DrawingTool;
 public interface DrawingTablet {
 
     /**
+     * Apply tool.
+     */
+    void applyTool();
+
+    /**
+     * Sets position.
+     *
+     * @param mouseX the mouse x
+     * @param mouseY the mouse y
+     */
+    void setPosition(int mouseX, int mouseY);
+
+    /**
      * Gets surface.
      *
      * @return the surface
@@ -39,4 +52,9 @@ public interface DrawingTablet {
      * @param tool the tool
      */
     void setTool(DrawingTool tool);
+
+    /**
+     * Sets cursor.
+     */
+    void setupCursor();
 }

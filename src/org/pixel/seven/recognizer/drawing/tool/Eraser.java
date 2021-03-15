@@ -5,13 +5,19 @@ import org.pixel.seven.recognizer.drawing.surface.DrawingSurface;
 import java.awt.*;
 
 /**
- * @project pixel-seven-recognizer
- * @created 01.03.2021 15:22
- * <p>
+ * The type Eraser.
+ *
  * @author Alexander A. Kropotin
+ * @project pixel -seven-recognizer
+ * @created 01.03.2021 15:22 <p>
  */
 public class Eraser extends AbstractDrawingTool {
 
+    /**
+     * Instantiates a new Eraser.
+     *
+     * @param size the size
+     */
     public Eraser(float size) {
         this.size = size;
     }

@@ -89,9 +89,6 @@ public class MainFrame extends JFrame {
         return new Builder();
     }
 
-    public MainFrame() {
-    }
-
     public void init() {
         setVisible(true);
     }

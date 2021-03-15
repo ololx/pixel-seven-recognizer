@@ -45,29 +45,79 @@ public interface Neuron {
         double calculate(double association);
     }
 
+    /**
+     * The enum Activation functions.
+     */
     enum ActivationFunctions {
 
+        /**
+         * Sigmoid activation functions.
+         */
         SIGMOID(association ->  1 / (1 + Math.exp(-0.25d * association))),
+        /**
+         * Hyperbolic tangent activation functions.
+         */
         HYPERBOLIC_TANGENT(association -> Math.tan(association / 1));
 
+        /**
+         * The Activation function.
+         */
         private ActivationFunction activationFunction;
 
+        /**
+         * Instantiates a new Activation functions.
+         *
+         * @param activationFunction the activation function
+         */
         ActivationFunctions(ActivationFunction activationFunction) {
             this.activationFunction = activationFunction;
         }
 
+        /**
+         * Gets activation function.
+         *
+         * @return the activation function
+         */
         public ActivationFunction getActivationFunction() {
             return this.activationFunction;
         }
     }
 
+    /**
+     * Proceed double.
+     *
+     * @param input the input
+     * @return the double
+     */
     double proceed(double[] input);
 
+    /**
+     * Get weights double [ ].
+     *
+     * @return the double [ ]
+     */
     double[] getWeights() ;
 
+    /**
+     * Sets weights.
+     *
+     * @param weights the weights
+     */
     void setWeights(double[] weights);
 
+    /**
+     * Increase weight.
+     *
+     * @param index the index
+     * @param value the value
+     */
     void increaseWeight(int index, double value);
 
+    /**
+     * Decrease weight.
+     *
+     * @param index the index
+     * @param value the value
+     */
     void decreaseWeight(int index, double value);
 }

@@ -102,6 +102,7 @@ public interface DrawingTool {
     /**
      * Gets size.
      *
+     * @return the size
      */
     float getSize();
 
