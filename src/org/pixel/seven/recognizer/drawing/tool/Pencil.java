@@ -23,6 +23,20 @@ public class Pencil extends AbstractColoringTool {
     /**
      * Instantiates a new Pencil.
      *
+     * @param size    the size
+     * @param minSuze the min suze
+     * @param maxSize the max size
+     * @param color   the color
+     */
+    public Pencil(float size, float minSuze, float maxSize, int color) {
+        this(size, color);
+        this.minSize = minSuze;
+        this.maxSize = maxSize;
+    }
+
+    /**
+     * Instantiates a new Pencil.
+     *
      * @param size  the size
      * @param color the color
      */

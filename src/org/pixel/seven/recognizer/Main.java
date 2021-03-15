@@ -32,14 +32,16 @@ public class Main {
             );
         }
 
-        DigitBinaryClassifier neuro = new DigitBinaryClassifier(new Configuration(
+        Recognizer neuro = new DigitBinaryClassifier(new Configuration(
                 28,
                 28,
                 Integer.parseInt(args[0])
         ));
 
         DrawingPanel drawing = new DrawingPanel(28, 28);
-        MainFrame theMainFrame = new  MainFrame(drawing);
+        MainFrame theMainFrame = MainFrame.builder()
+                .child(drawing, 0, 0, 1024, 1024)
+                .build();
         SwingUtilities.invokeLater(new  Runnable() {
             public void run() {
                 theMainFrame.init();
@@ -51,13 +53,13 @@ public class Main {
             BufferedImage image = new BufferedImage(28, 28, BufferedImage.TYPE_INT_RGB);
             for (int x = 0; x < 28; x++) {
                 for (int y = 0; y < 28; y++) {
-                    if (model.getWeights()[y + x * 28] == 0) color = Color.BLACK.getRGB();
-                    else if (model.getWeights()[y + x * 28] < 0)
-                        color = new Color((int) ((255 / (model.getMinWeight() * 1000))
-                                * (int) (model.getWeights()[y + x * 28] * 1000)), 0, 0).getRGB();
-                    else if (model.getWeights()[y + x * 28] > 0)
-                        color = new Color(0, (int) ((255 / (model.getMaxWeight() * 1000))
-                                * (int) (model.getWeights()[y + x * 28] * 1000)), 0).getRGB();
+                    if (((NNetModelSnapshot) model).getWeights()[y + x * 28] == 0) color = Color.BLACK.getRGB();
+                    else if (((NNetModelSnapshot) model).getWeights()[y + x * 28] < 0)
+                        color = new Color((int) ((255 / (((NNetModelSnapshot) model).getMinWeight() * 1000))
+                                * (int) (((NNetModelSnapshot) model).getWeights()[y + x * 28] * 1000)), 0, 0).getRGB();
+                    else if (((NNetModelSnapshot) model).getWeights()[y + x * 28] > 0)
+                        color = new Color(0, (int) ((255 / (((NNetModelSnapshot) model).getMaxWeight() * 1000))
+                                * (int) (((NNetModelSnapshot) model).getWeights()[y + x * 28] * 1000)), 0).getRGB();
 
                     image.setRGB(y, x, color);
                 }
@@ -66,9 +68,9 @@ public class Main {
             drawing.setSurface(new Canvas(image));
             theMainFrame.setTitle(
                     String.format("Recognizer in training progress. Current probability = %s, with min weight = %s and max weight = %s",
-                            String.format("%.0f", model.getProbability()),
-                            String.format("%.2f", model.getMinWeight()),
-                            String.format("%.2f", model.getMaxWeight())
+                            String.format("%.0f", ((NNetModelSnapshot) model).getProbability()) + "%",
+                            String.format("%.2f", ((NNetModelSnapshot) model).getMinWeight()),
+                            String.format("%.2f", ((NNetModelSnapshot) model).getMaxWeight())
                     )
             );
         });

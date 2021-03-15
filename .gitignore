@@ -1,3 +1,6 @@
+# general exclude
+!.gitignore
+
 # all hidden files
 .*
 
@@ -53,6 +56,3 @@ nbproject/
 # project specific
 input/
 src/resources/
-
-# general exclude
-!.gitignore

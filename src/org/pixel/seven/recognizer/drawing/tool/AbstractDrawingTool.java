@@ -20,6 +20,16 @@ public abstract class AbstractDrawingTool implements DrawingTool {
     protected float size;
 
     /**
+     * The Max size.
+     */
+    protected float maxSize = 1;
+
+    /**
+     * The Min size.
+     */
+    protected float minSize = 100;
+
+    /**
      * Sets position.
      *
      * @param position the position
@@ -32,6 +42,7 @@ public abstract class AbstractDrawingTool implements DrawingTool {
     /**
      * Gets size.
      *
+     * @return the size
      */
     @Override
     public float getSize() {
@@ -41,6 +52,7 @@ public abstract class AbstractDrawingTool implements DrawingTool {
     /**
      * Change step.
      *
+     * @param value the value
      */
     @Override
     public void changeSizeOn(float value) {
@@ -54,6 +66,6 @@ public abstract class AbstractDrawingTool implements DrawingTool {
      */
     @Override
     public void setSize(float size) {
-        this.size = size > 0 ? size : this.size;
+        this.size = size >= this.minSize && size <= this.maxSize ? size : this.size;
     }
 }

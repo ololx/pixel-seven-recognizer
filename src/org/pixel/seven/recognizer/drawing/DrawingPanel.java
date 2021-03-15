@@ -33,7 +33,7 @@ public class DrawingPanel extends JPanel implements DrawingTablet {
 
     public DrawingPanel(int width, int height) {
         this.canvas = new Canvas(width, height, Color.BLACK);
-        this.tool = TOOLS.get("pencil");
+        this.tool = new Pencil(2f, 2f, 5f, Color.WHITE.getRGB());
     }
 
     public void paintComponent(Graphics g) {
