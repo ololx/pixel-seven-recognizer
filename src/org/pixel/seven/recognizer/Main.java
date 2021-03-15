@@ -39,6 +39,44 @@ public class Main {
         ));
 
         DrawingPanel drawing = new DrawingPanel(28, 28);
+        drawing.setupCursor();
+        drawing.addMouseListener(new  MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() == 1) drawing.applyTool();
+                else if (e.getButton() == 3) {
+                    drawing.getSurface().changeBackground(Color.BLACK);
+                    drawing.getSurface().clear();
+                    drawing.repaint();
+                }
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                if (e.getButton() == 3) return;
+
+                RecognitionResult result = neuro.recognize(drawing.getSurface().getImage());
+                drawing.getSurface().changeBackground(result.getResult() ? Color.GREEN : Color.RED);
+                drawing.repaint();
+            }
+        });
+
+        drawing.addMouseMotionListener(new MouseAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                drawing.setPosition(e.getX(), e.getY());
+                drawing.applyTool();
+            }
+
+            public void mouseMoved(MouseEvent e) {
+                drawing.setPosition(e.getX(), e.getY());
+            }
+        });
+
+        drawing.addMouseWheelListener(new MouseAdapter() {
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                drawing.getTool().changeSizeOn(e.getWheelRotation());
+                drawing.setupCursor();
+            }
+        });
+
         MainFrame theMainFrame = MainFrame.builder()
                 .child(drawing, 0, 0, 1024, 1024)
                 .build();
@@ -80,42 +118,5 @@ public class Main {
         theMainFrame.setTitle("Recognizer is ready to use. Please, draw the " + Integer.parseInt(args[0]));
         drawing.getSurface().clear();
         drawing.repaint();
-
-        drawing.addMouseListener(new  MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if (e.getButton() == 1) drawing.applyTool();
-                else if (e.getButton() == 3) {
-                    drawing.getSurface().changeBackground(Color.BLACK);
-                    drawing.getSurface().clear();
-                    drawing.repaint();
-                }
-            }
-
-            public void mouseReleased(MouseEvent e) {
-                if (e.getButton() == 3) return;
-
-                RecognitionResult result = neuro.recognize(drawing.getSurface().getImage());
-                drawing.getSurface().changeBackground(result.getResult() ? Color.GREEN : Color.RED);
-                drawing.repaint();
-            }
-        });
-
-        drawing.addMouseMotionListener(new MouseAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                drawing.setPosition(e.getX(), e.getY());
-                drawing.applyTool();
-            }
-
-            public void mouseMoved(MouseEvent e) {
-                drawing.setPosition(e.getX(), e.getY());
-            }
-        });
-
-        drawing.addMouseWheelListener(new MouseAdapter() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                drawing.getTool().changeSizeOn(e.getWheelRotation());
-                drawing.setupCursor();
-            }
-        });
     }
 }

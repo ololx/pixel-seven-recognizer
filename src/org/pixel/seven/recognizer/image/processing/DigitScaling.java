@@ -26,22 +26,183 @@ public class DigitScaling<I extends BufferedImage> implements ImageProcessing<I>
         /**
          * The Min x.
          */
-        int minX = Integer.MAX_VALUE;
+        private int x1;
 
         /**
          * The Max x.
          */
-        int maxX = 0;
+        private int x2;
 
         /**
          * The Min y.
          */
-        int minY = Integer.MAX_VALUE;
+        private int y1;
 
         /**
          * The Max y.
          */
-        int maxY = 0;
+        private int y2;
+
+        /**
+         * Instantiates a new Coordinates.
+         *
+         * @param width  the width
+         * @param height the height
+         */
+        public Coordinates(int width, int height) {
+            this(0, 0, width, height);
+        }
+
+        /**
+         * Instantiates a new Coordinates.
+         *
+         * @param x      the x
+         * @param y      the y
+         * @param width  the width
+         * @param height the height
+         */
+        public Coordinates(int x, int y, int width, int height) {
+            this.x1 = width;
+            this.y1 = height;
+            this.x2 = x;
+            this.y2 = y;
+        }
+
+        /**
+         * Gets x 1.
+         *
+         * @return the x 1
+         */
+        public int getX1() {
+            return this.x1;
+        }
+
+        /**
+         * Sets x 1.
+         *
+         * @param value the value
+         */
+        public void setX1(int value) {
+            this.x1 = value;
+        }
+
+        /**
+         * Gets x 2.
+         *
+         * @return the x 2
+         */
+        public int getX2() {
+            return this.x2;
+        }
+
+        /**
+         * Sets x 2.
+         *
+         * @param value the value
+         */
+        public void setX2(int value) {
+            this.x2 = value;
+        }
+
+        /**
+         * Gets y 1.
+         *
+         * @return the y 1
+         */
+        public int getY1() {
+            return this.y1;
+        }
+
+        /**
+         * Sets y 1.
+         *
+         * @param value the value
+         */
+        public void setY1(int value) {
+            this.y1 = value;
+        }
+
+        /**
+         * Gets y 2.
+         *
+         * @return the y 2
+         */
+        public int getY2() {
+            return this.y2;
+        }
+
+        /**
+         * Sets y 2.
+         *
+         * @param value the value
+         */
+        public void setY2(int value) {
+            this.y2 = value;
+        }
+
+        /**
+         * Gets min x.
+         *
+         * @return the min x
+         */
+        public int getMinX() {
+            return Math.min(this.x1, this.x2);
+        }
+
+        /**
+         * Gets max x.
+         *
+         * @return the max x
+         */
+        public int getMaxX() {
+            return Math.max(this.x1, this.x2);
+        }
+
+        /**
+         * Gets min y.
+         *
+         * @return the min y
+         */
+        public int getMinY() {
+            return Math.min(this.y1, this.y2);
+        }
+
+        /**
+         * Gets max y.
+         *
+         * @return the max y
+         */
+        public int getMaxY() {
+            return Math.max(this.y1, this.y2);
+        }
+
+        /**
+         * Gets width.
+         *
+         * @return the width
+         */
+        public int getWidth() {
+            return this.getMaxX() - this.getMinX();
+        }
+
+        /**
+         * Gets height.
+         *
+         * @return the height
+         */
+        public int getHeight() {
+            return this.getMaxY() - this.getMinY();
+        }
+
+        /**
+         * To string string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+            return String.format("x1 = %d, y1 = %d, x2 = %d, y2 = %d", x1, y1, x2, y2);
+        }
     }
 
     /**
@@ -83,15 +244,15 @@ public class DigitScaling<I extends BufferedImage> implements ImageProcessing<I>
      * @return the image coordinates
      */
     private Coordinates getImageCoordinates(I image) {
-        Coordinates coordinates = new Coordinates();
+        Coordinates coordinates = new Coordinates(image.getWidth(), image.getHeight());
         for (int currentX = 0; currentX < image.getWidth(); currentX++) {
             for (int currentY = 0; currentY < image.getHeight(); currentY++) {
                 if (image.getRGB(currentX, currentY) == backgroundColor) continue;
 
-                if (coordinates.minX > currentX) coordinates.minX = currentX;
-                if (coordinates.maxX < currentX) coordinates.maxX = currentX;
-                if (coordinates.minY > currentY) coordinates.minY = currentY;
-                if (coordinates.maxY < currentY) coordinates.maxY = currentY;
+                if (coordinates.getX1() > currentX) coordinates.setX1(currentX);
+                if (coordinates.getX2() < currentX) coordinates.setX2(currentX);
+                if (coordinates.getY1() > currentY) coordinates.setY1(currentY);
+                if (coordinates.getY2() < currentY) coordinates.setY2(currentY);
             }
         }
 
@@ -105,17 +266,14 @@ public class DigitScaling<I extends BufferedImage> implements ImageProcessing<I>
      * @return the sub image
      */
     private I getSubImage(I image) {
-        Coordinates subImageCoordinates = this.getImageCoordinates(image);
-        if (subImageCoordinates.minX == 0
-                && subImageCoordinates.minY == 0
-                && subImageCoordinates.maxX == image.getWidth()
-                && subImageCoordinates.maxY == image.getHeight()) return image;
+        Coordinates imageCoords = this.getImageCoordinates(image);
+        if (imageCoords.getWidth() == image.getWidth() && imageCoords.getHeight() == image.getHeight()) return image;
 
         BufferedImage subImage = image.getSubimage(
-                subImageCoordinates.minX,
-                subImageCoordinates.minY,
-                subImageCoordinates.maxX - subImageCoordinates.minX,
-                subImageCoordinates.maxY - subImageCoordinates.minY
+                imageCoords.getX1(),
+                imageCoords.getY1(),
+                imageCoords.getWidth(),
+                imageCoords.getHeight()
         );
 
         BufferedImage resized = new BufferedImage(
@@ -125,7 +283,7 @@ public class DigitScaling<I extends BufferedImage> implements ImageProcessing<I>
         );
 
         Graphics2D g = resized.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR); //produces a balanced resizing (fast and decent quality)
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g.drawImage(
                 subImage,
                 0, 0, resized.getWidth(), resized.getHeight(),
