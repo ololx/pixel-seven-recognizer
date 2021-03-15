@@ -4,6 +4,7 @@ import org.pixel.seven.recognizer.image.DigitBufferedImage;
 import org.pixel.seven.recognizer.image.processing.DigitAccentuation;
 import org.pixel.seven.recognizer.image.processing.DigitScaling;
 import org.pixel.seven.recognizer.recognition.nn.NNet;
+import org.pixel.seven.recognizer.recognition.nn.Neuron;
 import org.pixel.seven.recognizer.recognition.nn.SingleLayerPerceptron;
 
 import java.awt.image.BufferedImage;
@@ -19,6 +20,40 @@ import java.util.logging.Logger;
  * @created 05.03.2021 20:24 <p>
  */
 public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> {
+
+    /**
+     * Of digit binary classifier.
+     *
+     * @param cfg the cfg
+     * @return the digit binary classifier
+     */
+    public static DigitBinaryClassifier of(Configuration cfg) {
+        return new DigitBinaryClassifier(cfg);
+    }
+
+    /**
+     * Of digit binary classifier.
+     *
+     * @param sampleWidth        the sample width
+     * @param sampleHeight       the sample height
+     * @param recognitionDigit   the recognition digit
+     * @param activationFunction the activation function
+     * @param trainingSpeed      the training speed
+     * @return the digit binary classifier
+     */
+    public static DigitBinaryClassifier of(int sampleWidth,
+                                           int sampleHeight,
+                                           int recognitionDigit,
+                                           Neuron.ActivationFunction activationFunction,
+                                           double trainingSpeed) {
+        return new DigitBinaryClassifier(new Configuration(
+                sampleWidth,
+                sampleHeight,
+                recognitionDigit,
+                activationFunction,
+                trainingSpeed
+        ));
+    }
 
     /**
      * The Log.
@@ -119,5 +154,15 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
                 processedSample,
                 this.network.getOutput()
         );
+    }
+
+    /**
+     * Gets configuration.
+     *
+     * @return the configuration
+     */
+    @Override
+    public Configuration getConfiguration() {
+        return this.cfg;
     }
 }

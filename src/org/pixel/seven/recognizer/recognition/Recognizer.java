@@ -29,4 +29,11 @@ public interface Recognizer<I, S> {
      * @return the boolean
      */
     boolean retrain(TrainingSet<S> trainingSet, Consumer<NNetModelSnapshot> consumer);
+
+    /**
+     * Gets configuration.
+     *
+     * @return the configuration
+     */
+    Configuration getConfiguration();
 }
