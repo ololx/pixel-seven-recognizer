@@ -23,7 +23,9 @@ The Pixel Seven Recognizer is a simple recognizer, which allows to draw one digi
 
 ##  📖 About
 
-The Pixel Seven Recognizer is a simple recognizer, which allows to draw one digit and get the answer on a question "Is this digit intended?". This recognizer based on the single layer perceptron and could be trained to recognition of one digit (from 1 to 9).
+The Pixel Seven Recognizer is a simple recognizer, which allows to draw one digit and get the answer on a question "Is this digit intended?". This recognizer based on the single layer perceptron and could be trained to recognition of one digit (from 1 to 9). The following image demonstrates this recognition.
+
+<img src="https://github.com/ololx/pixel-seven-recognizer/blob/assets/demo/recognition-schema.png?raw=true" width="700"/>
 
 ## 📸 Demo
 
@@ -33,7 +35,7 @@ This image demonstrates the recognizer usage. The green background means that th
 
 This image  demonstrates the visualisation of the recognizer training process. Each pixel of the image is colored according to its weight for the neural network. Green means positive weight for a given pixel, red means negative weight. A more saturated color means a higher value, black means 0.
 
-<img src="https://github.com/ololx/pixel-seven-recognizer/blob/assets/demo/recognition-demo-1.gif?raw=true" width="700"/>
+<img src="https://github.com/ololx/pixel-seven-recognizer/blob/assets/demo/training-demo-1.gif?raw=true" width="700"/>
 
 ## 🎚 Features
 
