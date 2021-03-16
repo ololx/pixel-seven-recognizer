@@ -182,7 +182,8 @@ public class DigitScaling<I extends BufferedImage> implements ImageProcessing<I>
          * @return the width
          */
         public int getWidth() {
-            return this.getMaxX() - this.getMinX() + 1;
+            int width = this.getMaxX() - this.getMinX();
+            return width == 0 ? 1 : width;
         }
 
         /**
@@ -191,7 +192,8 @@ public class DigitScaling<I extends BufferedImage> implements ImageProcessing<I>
          * @return the height
          */
         public int getHeight() {
-            return this.getMaxY() - this.getMinY() + 1;
+            int height = this.getMaxY() - this.getMinY();
+            return height == 0 ? 1 : height;
         }
 
         /**

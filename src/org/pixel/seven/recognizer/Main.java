@@ -4,6 +4,7 @@ import org.pixel.seven.recognizer.drawing.DrawingPanel;
 import org.pixel.seven.recognizer.drawing.DrawingTablet;
 import org.pixel.seven.recognizer.drawing.surface.Canvas;
 import org.pixel.seven.recognizer.recognition.*;
+import org.pixel.seven.recognizer.recognition.nn.NNet;
 import org.pixel.seven.recognizer.recognition.nn.Neuron;
 
 import javax.imageio.ImageIO;
@@ -14,11 +15,14 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * The type Main.
  */
 public class Main {
+
+    private static final Logger LOG = Logger.getAnonymousLogger();
 
     /**
      * The entry point of application.
@@ -31,6 +35,7 @@ public class Main {
         if (args == null || args.length < 2)
             throw new IllegalArgumentException("Required arguments is missing: digit & path to training pictures *.png");
 
+        LOG.info("Init recognizer ...");
         Recognizer recognizer = DigitBinaryClassifier.of(
                 28,
                 28,
@@ -41,15 +46,19 @@ public class Main {
         DrawingPanel drawing = getDrawingPanel(recognizer);
         MainFrame mainFrame = MainFrame.builder()
                 .child(drawing, 0, 0, 700, 700)
+                .title("Recognizer in process of loading data set.")
                 .build();
-        TrainingSet<Sample> trainingSet = loadTrainingData(args[1]);
-        mainFrame.init();
 
+        LOG.info("Loading the training data set ...");
+        TrainingSet<Sample> trainingSet = loadTrainingData(args[1]);
+        LOG.info("The training data set was loaded.\nInit retrain process ...");
+        mainFrame.init();
         boolean retrained = recognizer.retrain(
                 trainingSet,
                 model -> showRetrain(drawing, mainFrame, (NNetModelSnapshot) model)
         );
 
+        LOG.info("The retrain process was completed. Enjoy =)");
         if (retrained) Thread.sleep(2000);
 
         mainFrame.setTitle("Recognizer is ready to use. Please, draw the "
