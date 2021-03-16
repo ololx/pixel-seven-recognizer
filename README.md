@@ -86,14 +86,16 @@ To use it is necessary to:
 {digit} path_to_training_data
 ```
 where {digit} - is a digit from 0 to 9; path_to_training_data - path to directory with a png files (the name should contains from 11 symbols, where 11s symbol is a digit; fro instance `000000-num5.png` for png with `5` ).
+
 *For* instance:` java -jar pixel-seven-recognizer.jar 2 /Volumes/disk1/traindata`
+
 *!Important: the data set could be downloaded by the following link https://pjreddie.com/media/files/mnist_train.tar.gz* (author's repository link -  https://github.com/pjreddie/mnist-csv-png)
 
 3. Wait until the training data is loaded and the training process is complete (after training will be a black frame).
 4. Draw digit and clear it, and  again:
-    4.1. Use the first mouse button to draw. 
-    4.2. Use the second mouse button to clear.
-    4.3. Use the mouse wheel (up/down) to resize the brush stroke.
+    1. Use the first mouse button to draw. 
+    2. Use the second mouse button to clear.
+    3. Use the mouse wheel (up/down) to resize the brush stroke.
 
 ## 🛠 Built With
 
