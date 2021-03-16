@@ -66,7 +66,10 @@ public class Main {
      * @throws IOException the io exception
      */
     private static TrainingSet<Sample> loadTrainingData(String samplesDir) throws IOException {
-        File[] imagesFiles = new File(samplesDir).listFiles();
+        File trainingDir = new File(samplesDir);
+        if (!trainingDir.exists()) throw new IllegalArgumentException("The directory with training pictures is not exists");
+
+        File[] imagesFiles = trainingDir.listFiles();
         TrainingSet<Sample> trainingSet = new TrainingSet<>();
         for (File imagesFile : imagesFiles) {
             trainingSet.addSample(
