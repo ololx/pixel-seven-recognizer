@@ -78,16 +78,23 @@ public class Main {
         File trainingDir = new File(samplesDir);
         if (!trainingDir.exists()) throw new IllegalArgumentException("The directory with training pictures is not exists");
 
-        File[] imagesFiles = trainingDir.listFiles();
         TrainingSet<Sample> trainingSet = new TrainingSet<>();
-        for (File imagesFile : imagesFiles) {
-            trainingSet.addSample(
-                    Sample.of(
-                            ImageIO.read(imagesFile),
-                            Integer.parseInt(imagesFile.getName().substring(10, 11))
-                    )
-            );
+        for (File digitFolder : trainingDir.listFiles()) {
+            if (digitFolder.isFile()) continue;
+
+            for (File digitImage : digitFolder.listFiles()) {
+                if (!digitImage.isFile()) continue;
+
+                trainingSet.addSample(
+                        Sample.of(
+                                ImageIO.read(digitImage),
+                                Integer.parseInt(digitFolder.getName())
+                        )
+                );
+            }
         }
+
+        trainingSet.shuffle();
 
         return trainingSet;
     }
