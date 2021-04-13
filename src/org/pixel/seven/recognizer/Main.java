@@ -15,6 +15,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -74,20 +76,44 @@ public class Main {
      * @return the training set
      * @throws IOException the io exception
      */
-    private static TrainingSet<Sample> loadTrainingData(String samplesDir) throws IOException {
+    private static TrainingSet<Sample> loadTrainingData(String samplesDir) throws IllegalArgumentException, IOException {
         File trainingDir = new File(samplesDir);
         if (!trainingDir.exists()) throw new IllegalArgumentException("The directory with training pictures is not exists");
 
-        File[] imagesFiles = trainingDir.listFiles();
+        File[] trainingDataFolders = trainingDir.listFiles();
+        LOG.info(String.format("Found %s folders with training instances.", trainingDataFolders.length));
+
         TrainingSet<Sample> trainingSet = new TrainingSet<>();
-        for (File imagesFile : imagesFiles) {
-            trainingSet.addSample(
-                    Sample.of(
-                            ImageIO.read(imagesFile),
-                            Integer.parseInt(imagesFile.getName().substring(10, 11))
-                    )
-            );
+        for (File digitFolder : trainingDataFolders) {
+            if (digitFolder.isFile()) continue;
+
+            int digit;
+            try {
+                digit = Integer.parseInt(digitFolder.getName());
+            } catch (NumberFormatException e) {
+                LOG.warning(String.format(
+                        "The folder with name \"%s\" is not valid folder for training data. This folder will be skipped.",
+                        digitFolder.getName()
+                ));
+                continue;
+            }
+
+            File[] digitImages = digitFolder.listFiles();
+            LOG.info(String.format("Found %s instances of digit = %s.", digitImages.length, digit));
+            for (File digitImage : digitImages) {
+                if (!digitImage.isFile()) continue;
+
+                trainingSet.addSample(
+                        Sample.of(
+                                ImageIO.read(digitImage),
+                                digit
+                        )
+                );
+            }
         }
+
+        trainingSet.shuffle();
+        LOG.info(String.format("%s training examples was created.", trainingSet.getSamplesCount()));
 
         return trainingSet;
     }

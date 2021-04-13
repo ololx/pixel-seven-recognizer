@@ -1,6 +1,7 @@
 package org.pixel.seven.recognizer.recognition;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,5 +58,9 @@ public class TrainingSet<S> {
      */
     public int getSamplesCount() {
         return this.samples.size();
+    }
+
+    public void shuffle() {
+        Collections.shuffle(this.samples);
     }
 }
