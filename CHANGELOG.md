@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Refactor project code.
 
+## [2.0.0] - 2021-04-13
+
+### Changed
+- The loading training data process from specific format into standard `MNIST database` folder format (`mnist_png/training/*`). Files with images of numbers should no longer be named in a certain way and lie in the same folder.
+
 ## [1.0.0] - 2021-03-16
 
 ### Added
