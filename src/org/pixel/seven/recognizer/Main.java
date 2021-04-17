@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    private static final Logger LOG = Logger.getAnonymousLogger();
+    private static final Logger LOG = Logger.getLogger("Pixel Seven Recognizer");
 
     /**
      * The entry point of application.
@@ -37,13 +37,19 @@ public class Main {
         if (args == null || args.length < 2)
             throw new IllegalArgumentException("Required arguments is missing: digit & path to training pictures *.png");
 
+        double probability = Configuration.DEFAULT_AIM_PROBABILITY;
+        if (args.length > 2) {
+            probability = Double.parseDouble(args[2]);
+        }
+
         LOG.info("Init recognizer ...");
         Recognizer recognizer = DigitBinaryClassifier.of(
                 28,
                 28,
                 Integer.parseInt(args[0]),
-                Neuron.ActivationFunctions.SIGMOID.getActivationFunction(),
-                .01d
+                association -> association > ((28 * 28) / 10) ? 1 : 0,
+                .01d,
+                probability
         );
         DrawingPanel drawing = getDrawingPanel(recognizer);
         MainFrame mainFrame = MainFrame.builder()
@@ -52,13 +58,14 @@ public class Main {
                 .build();
 
         LOG.info("Loading the training data set ...");
-        TrainingSet<Sample> trainingSet = loadTrainingData(args[1]);
-        LOG.info("The training data set was loaded.\nInit retrain process ...");
-        mainFrame.init();
-        boolean retrained = recognizer.retrain(
-                trainingSet,
+        SimpleTrainer trainer = new SimpleTrainer(
+                loadTrainingData(args[1]),
                 model -> showRetrain(drawing, mainFrame, (NNetModelSnapshot) model)
         );
+        LOG.info("The training data set was loaded.\nInit retrain process ...");
+
+        mainFrame.init();
+        boolean retrained = recognizer.retrain(trainer);
 
         LOG.info("The retrain process was completed. Enjoy =)");
         if (retrained) Thread.sleep(2000);

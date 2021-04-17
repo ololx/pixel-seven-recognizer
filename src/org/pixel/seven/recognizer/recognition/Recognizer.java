@@ -24,11 +24,9 @@ public interface Recognizer<I, S> {
     /**
      * Retrain boolean.
      *
-     * @param trainingSet the training set
-     * @param consumer    the consumer
      * @return the boolean
      */
-    boolean retrain(TrainingSet<S> trainingSet, Consumer<NNetModelSnapshot> consumer);
+    boolean retrain(NnTrainer<S> trainer);
 
     /**
      * Gets configuration.
