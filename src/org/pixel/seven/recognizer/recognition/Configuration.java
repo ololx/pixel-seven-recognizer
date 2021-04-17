@@ -18,6 +18,8 @@ public class Configuration {
      */
     public static final double DEFAULT_TRAINING_SPEED = .01d;
 
+    public static final double DEFAULT_AIM_PROBABILITY = 96d;
+
     /**
      * The default weight inc/dec step value
      */
@@ -44,6 +46,11 @@ public class Configuration {
     private double trainingSpeed;
 
     /**
+     * The training aim.
+     */
+    private double aimProbability;
+
+    /**
      * The Recognition digit.
      */
     private int recognitionDigit;
@@ -56,7 +63,7 @@ public class Configuration {
      * @param recognitionDigit the recognition digit
      */
     public Configuration(int sampleWidth, int sampleHeight, int recognitionDigit) {
-        this(sampleWidth, sampleHeight, recognitionDigit, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_TRAINING_SPEED);
+        this(sampleWidth, sampleHeight, recognitionDigit, DEFAULT_ACTIVATION_FUNCTION, DEFAULT_TRAINING_SPEED, DEFAULT_AIM_PROBABILITY);
     }
 
     /**
@@ -72,13 +79,15 @@ public class Configuration {
                          int sampleHeight,
                          int recognitionDigit,
                          Neuron.ActivationFunction activationFunction,
-                         double trainingSpeed) {
+                         double trainingSpeed,
+                         double aimProbability) {
         Objects.requireNonNull(activationFunction, "The activation function couldn't be null");
         this.activation = activationFunction;
         this.trainingSpeed = trainingSpeed;
         this.sampleWidth = sampleWidth;
         this.sampleHeight = sampleHeight;
         this.recognitionDigit = recognitionDigit;
+        this.aimProbability = aimProbability;
     }
 
     /**
@@ -134,4 +143,15 @@ public class Configuration {
     public int getInputSize() {
         return this.sampleWidth * this.sampleHeight;
     }
+
+    /**
+     * Gets training aim probability.
+     *
+     * @return training aim probability
+     */
+    public double getAimProbability() {
+        return this.aimProbability;
+    }
+
+
 }

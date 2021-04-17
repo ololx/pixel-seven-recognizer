@@ -45,13 +45,15 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
                                            int sampleHeight,
                                            int recognitionDigit,
                                            Neuron.ActivationFunction activationFunction,
-                                           double trainingSpeed) {
+                                           double trainingSpeed,
+                                           double trainForProbability) {
         return new DigitBinaryClassifier(new Configuration(
                 sampleWidth,
                 sampleHeight,
                 recognitionDigit,
                 activationFunction,
-                trainingSpeed
+                trainingSpeed,
+                trainForProbability
         ));
     }
 
@@ -90,48 +92,12 @@ public class DigitBinaryClassifier implements Recognizer<BufferedImage, Sample> 
         );
     }
 
-    /**
-     * Retrain boolean.
-     *
-     * @param trainingSet the training set
-     * @param consumer    the consumer
-     * @return the boolean
-     */
     @Override
-    public boolean retrain(TrainingSet<Sample> trainingSet, Consumer<NNetModelSnapshot> consumer) {
-        double probability = 0, maxProbability = 0, right = 0;
-        do {
-            maxProbability = probability;
-            right = 0;
-            int iteration = 0;
-            for (Sample sample : trainingSet.getSamples()) {
-                iteration++;
-                int[] inputPixels = new DigitBufferedImage(sample.getSample())
-                        .process(
-                                new DigitAccentuation(),
-                                new DigitScaling()
-                        ).getPixels();
-                int value = sample.getValue();
-                this.network.setInput(inputPixels);
+    public boolean retrain(NnTrainer<Sample> trainer) {
+        trainer.setNetwork(this.network);
+        boolean result = trainer.retrain(this.cfg.getRecognitionDigit(), getConfiguration().getAimProbability());
 
-                this.network.proceed();
-                if (value != this.cfg.getRecognitionDigit() && this.network.getOutput() == 1) {
-                    this.network.decreaseWeights();
-                } else if (value == this.cfg.getRecognitionDigit() && this.network.getOutput() != 1) {
-                    this.network.increaseWeights();
-                } else if (value == this.cfg.getRecognitionDigit() && this.network.getOutput() == 1
-                        || value != this.cfg.getRecognitionDigit() && this.network.getOutput() != 1) {
-                    right++;
-                }
-
-                consumer.accept(NNetModelSnapshot.of(this.network.getWeights(), (100d / iteration) * right));
-            }
-
-            probability = (100d / trainingSet.getSamplesCount()) * right;
-            log.info("PR = " + probability);
-        } while (probability < 96 && maxProbability <= probability);
-
-        return true;
+        return result;
     }
 
     /**
