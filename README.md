@@ -2,7 +2,7 @@
 
 The Pixel Seven Recognizer is a simple recognizer, which allows to draw one digit and get the answer on a question "Is this digit intended?"
 
-[![status](https://img.shields.io/badge/status-completed-inactive?style=flat-square)](BADGES_GUIDE.md#status) [![version](https://img.shields.io/badge/version-2.0.0-informational?style=flat-square)](BADGES_GUIDE.md#version) [![oss lifecycle](https://img.shields.io/badge/oss_lifecycle-active-important?style=flat-square)](BADGES_GUIDE.md#oss-lifecycle) [![maintenance](https://img.shields.io/badge/maintenance-yes-informational?style=flat-square)](BADGES_GUIDE.md#maintenance) [![latest release date](https://img.shields.io/badge/latest_release_date-April_13,_2021-informational?style=flat-square)](BADGES_GUIDE.md#release-date) [![last commit](https://img.shields.io/badge/last_commit-April_13,_2021-informational?style=flat-square)](BADGES_GUIDE.md#commit-date)
+[![status](https://img.shields.io/badge/status-completed-inactive?style=flat-square)](BADGES_GUIDE.md#status) [![version](https://img.shields.io/badge/version-2.1.0-informational?style=flat-square)](BADGES_GUIDE.md#version) [![oss lifecycle](https://img.shields.io/badge/oss_lifecycle-active-important?style=flat-square)](BADGES_GUIDE.md#oss-lifecycle) [![maintenance](https://img.shields.io/badge/maintenance-yes-informational?style=flat-square)](BADGES_GUIDE.md#maintenance) [![latest release date](https://img.shields.io/badge/latest_release_date-April_17,_2021-informational?style=flat-square)](BADGES_GUIDE.md#release-date) [![last commit](https://img.shields.io/badge/last_commit-April_17,_2021-informational?style=flat-square)](BADGES_GUIDE.md#commit-date)
 
 [![license](https://img.shields.io/badge/license-MIT-informational?style=flat-square)](LICENSE) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg?style=flat-square)](CODE_OF_CONDUCT.md)
 
@@ -83,13 +83,17 @@ To use it is necessary to:
 1. Build the project.
 2. Launch the instance .jar with the follows args:
 ```bash
-{digit} path_to_training_data
+{digit} {path_to_training_data} {network_training_probability}
 ```
-where {digit} - is a digit from 0 to 9; path_to_training_data - path to directory with the `MNIST database` training data (`mnist_png/training/*`).
+where
+
+- {digit} - is a digit from 0 to 9;
+- {path_to_training_data} - path to directory with the `MNIST database` training data (`mnist_png/training/*`);
+- {network_training_probability} - OPTIONAL - the real number from 0 to 100, which specifies the probability for training the network.
 
 *For* instance:` java -jar pixel-seven-recognizer.jar 2 /Volumes/disk1/mnist_png/training`
 
-*!Important: the data set could be downloaded by the following link https://github.com/myleott/mnist_png/raw/master/mnist_png.tar.gz (author's repository link -  https://github.com/myleott/mnist_png)*
+*!Important: the data set could be downloaded by the following link http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz (main page link - http://yann.lecun.com/exdb/mnist/)*
 
 3. Wait until the training data is loaded and the training process is complete (after training will be a black frame).
 4. Draw digit and clear it, and  again:

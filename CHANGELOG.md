@@ -10,6 +10,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Refactor project code.
 
+## [2.1.0] - 2021-04-17
+
+### Changed
+- The training process - init simple trainer realization.
+
+### Added
+- The new optional argument, which specifies the probability for training the network.
+
 ## [2.0.0] - 2021-04-13
 
 ### Changed
